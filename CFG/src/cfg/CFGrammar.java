@@ -21,17 +21,20 @@ public class CFGrammar {
     private HashMap<String, Set<String>> first;
     private HashMap<String, Set<String>> follow;
     private HashMap<String, Set<String>> grammarEquations = null;
+    private HashMap<String, Set<String>> normalizedGE = null;
     private HashMap<String, HashMap<String, String>> mTable;
     private String initialState = "";
     
     public CFGrammar(ArrayList<String> grammarEq){
         this.grammarEquations = new HashMap<>();
+        this.normalizedGE = new HashMap<>();
         this.terminals = new HashSet<>();
         this.nonTerminals = new HashSet<>();
         this.first = new HashMap<>();
         this.follow = new HashMap<>();
         this.mTable = new HashMap<>();
         init(grammarEq);
+        normalizeGE();
     }
     
     private boolean isNonTerminal(char symbol){
@@ -67,25 +70,57 @@ public class CFGrammar {
         }
     }
     
-    public void getFirst(){
+    private void normalizeGE(){
+        removeLeftRec();
+    }
+    
+    private void removeLeftRec(){
         for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
             String nonTerminal = entry.getKey();
-            System.out.println(nonTerminal + ": " +this.grammarEquations.get(nonTerminal));
-            if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal);
+            String auxNonTerminal = nonTerminal + "'";
+            boolean isRemoved = false;
+            this.normalizedGE.put(nonTerminal, new HashSet<>());
+            Set<String> bethaSet = new HashSet<>();
+            for(String production : entry.getValue()){
+                char symbol = production.charAt(0);
+                if(isNonTerminal(symbol) && nonTerminal.equals(symbol + "")){
+                    isRemoved = true;
+                    String alpha = production.substring(1);
+                    if(this.normalizedGE.get(auxNonTerminal) == null){
+                        this.normalizedGE.put(auxNonTerminal, new HashSet<>());
+                    }
+                    this.normalizedGE.get(auxNonTerminal).add(alpha);
+                }
+                if(!production.contains(nonTerminal)) bethaSet.add(production + auxNonTerminal);
+            }
+            if(!isRemoved){
+                this.normalizedGE.get(nonTerminal).addAll(entry.getValue());
+            } else {
+                this.normalizedGE.get(nonTerminal).addAll(bethaSet);
+                this.normalizedGE.get(auxNonTerminal).add("&");
+            }
         }
     }
     
-    private Set<String> recFirst(String nonTerminal){
+    public void getFirst(){
+        for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
+            String nonTerminal = entry.getKey();
+            System.out.println(nonTerminal + ": " + this.grammarEquations.get(nonTerminal));
+            //if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, "");
+        }
+    }
+    
+    private Set<String> recFirst(String nonTerminal, String lastNonTerminal){
         if(!first.get(nonTerminal).isEmpty()) return first.get(nonTerminal);
         for(String production : this.grammarEquations.get(nonTerminal)){
             char symbol = production.charAt(0);
-            if(isNonTerminal(symbol)){
+            if(isNonTerminal(symbol) && !lastNonTerminal.equals(symbol + "")){
                 if(!first.get(symbol + "").isEmpty()){
                     first.get(nonTerminal).addAll(first.get(symbol + ""));
                 }else{
-                    first.get(nonTerminal).addAll(recFirst(symbol + ""));
+                    first.get(nonTerminal).addAll(recFirst(symbol + "", nonTerminal));
                 }
-            } else {
+            } else if(!isNonTerminal(symbol)) {
                 first.get(nonTerminal).add(symbol + "");
             }
         }

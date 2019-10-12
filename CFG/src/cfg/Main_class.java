@@ -18,12 +18,12 @@ public class Main_class {
      */
     public static void main(String[] args) {
         ArrayList<String> ge = new ArrayList<>();
-        test2(ge);
+        test3(ge);
         CFGrammar cfg = new CFGrammar(ge);
         cfg.getFirst();
-        cfg.printFi();
-        cfg.getFollow();
-        cfg.printFo();
+        //cfg.printFi();
+        //cfg.getFollow();
+        //cfg.printFo();
     }
     
     private static void test1(ArrayList<String> ge){
@@ -45,5 +45,14 @@ public class Main_class {
         ge.add("A->baG");
         ge.add("G->bG");
         ge.add("G->&");
+    }
+    
+    private static void test3(ArrayList<String> ge){
+        ge.add("E->E+T");
+        ge.add("E->T");
+        ge.add("T->T*F");
+        ge.add("T->F");
+        ge.add("F->i");
+        ge.add("F->(E)"); 
     }
 }
