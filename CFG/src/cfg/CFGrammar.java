@@ -77,14 +77,24 @@ public class CFGrammar {
     public void getFirst(){
         for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
             String nonTerminal = entry.getKey();
+            System.out.println(nonTerminal + ": " +this.grammarEquations.get(nonTerminal));
             if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal);
         }
     }
     
     private Set<String> recFirst(String nonTerminal){
+        if(!first.get(nonTerminal).isEmpty()) return first.get(nonTerminal);
         for(String production : this.grammarEquations.get(nonTerminal)){
-            if(isTerminal(production) || production.equals("&")) first.get(nonTerminal).add(production);
-            else first.get(nonTerminal).addAll(recFirst(production));
+            if(isTerminal(production) || production.equals("&")){
+                first.get(nonTerminal).add(production);
+                continue;
+            }
+            char symbol = production.charAt(0);
+            if(isTerminal(symbol + "")){
+                first.get(nonTerminal).add(symbol + "");
+            } else if(isNonTerminal(symbol)){
+                first.get(nonTerminal).addAll(recFirst(symbol + ""));
+            }
         } 
         return first.get(nonTerminal);
     }
@@ -152,7 +162,7 @@ public class CFGrammar {
                 }
             }
         }
-        return follow.get(nonTerminal);
+        return follow.get(nonTerminalP);
     }
     
     private void print(){

@@ -23,8 +23,9 @@ public class Main_class {
         ge.add("A->n");
         ge.add("A->id");
         ge.add("L->(S)");
-        ge.add("S->E,S");
-        ge.add("S->E");
+        ge.add("S->EF");
+        ge.add("F->,S");
+        ge.add("F->&");
         CFGrammar cfg = new CFGrammar(ge);
         cfg.getFirst();
         cfg.printFi();
