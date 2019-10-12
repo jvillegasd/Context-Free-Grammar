@@ -81,12 +81,13 @@ public class CFGrammar {
     private void checkProduction(String production){
         for(int i = 0; i < production.length(); i++){
             char symbol = production.charAt(i);
+            if("'".equals(symbol + "")) continue;
             if(isNonTerminal(symbol)){
-                if(i + 1 < production.length() &&  "'".equals(production.charAt(i + 1))){
+                if(i + 1 < production.length() &&  "'".equals(production.charAt(i + 1) + "")){
                     nonTerminals.add(symbol + "'");
                 } else nonTerminals.add(symbol + "");
             }
-            else if(symbol != '&' && !"'".equals(symbol)) terminals.add(symbol + "");
+            else if(symbol != '&' && !"'".equals(symbol + "")) terminals.add(symbol + "");
         }
     }
     
@@ -135,15 +136,15 @@ public class CFGrammar {
         for(String production : this.normalizedGE.get(nonTerminal)){
             char symbolC = production.charAt(0);
             String symbol = symbolC + "";
-            if(1 < production.length() && "'".equals(production.charAt(1))) symbol+="'";
+            if(1 < production.length() && "'".equals(production.charAt(1) + "")) symbol+="'";
             if(isNonTerminal(symbol) && !lastNonTerminal.equals(symbol)){
                 if(!first.get(symbol).isEmpty()){
                     first.get(nonTerminal).addAll(first.get(symbol));
                 }else{
                     first.get(nonTerminal).addAll(recFirst(symbol, nonTerminal));
                 }
-            } else if(!isNonTerminal(symbol)) {
-                first.get(nonTerminal).add(symbol);
+            } else if(isTerminal(symbolC + "") || symbolC == '&') {
+                first.get(nonTerminal).add(symbolC + "");
             }
         }
         return first.get(nonTerminal);
@@ -177,16 +178,16 @@ public class CFGrammar {
         if(production.length() == 1) return;
         for(int i = 0; i < production.length(); i++){
             char nonTerminalC = production.charAt(i);
-            if("'".equals(nonTerminalC)) continue;
+            if("'".equals(nonTerminalC + "")) continue;
             String nonTerminal = nonTerminalC + "";
-            if(i + 1 < production.length() && "'".equals(production.charAt(i + 1))){
+            if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
                 nonTerminal+="'";
                 i++;
             }
             if(isNonTerminal(nonTerminal) && i + 1 < production.length()){
                 char bethaC = production.charAt(i + 1);
                 String betha = bethaC + "";
-                if(i + 1 < production.length() && "'".equals(production.charAt(i + 1))) betha+="'";
+                if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")) betha+="'";
                 if(isNonTerminal(betha)){
                     Set<String> bethaFirst = first.get(betha);
                     bethaFirst.remove("&");
@@ -201,7 +202,7 @@ public class CFGrammar {
         for(int i = 0; i < production.length(); i++){
             String symbol = production.charAt(i) + "";
             if(symbol.equals("'")) continue;
-            if(i + 1 < production.length() && "'".equals(production.charAt(i + 1))){
+            if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
                 symbol+="'";
                 i++;
             }
@@ -209,7 +210,7 @@ public class CFGrammar {
                 if(i + 1 < production.length()){
                     char bethaC = production.charAt(i + 1);
                     String betha = bethaC + "";
-                    if(i + 2 < production.length() && "'".equals(production.charAt(i + 2))) betha+="'";
+                    if(i + 2 < production.length() && "'".equals(production.charAt(i + 2) + "")) betha+="'";
                     if(isTerminal(betha)){
                         follow.get(nonTerminalB).add(betha);
                         continue;
