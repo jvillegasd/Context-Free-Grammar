@@ -90,12 +90,20 @@ public class CFGrammar {
                 continue;
             }
             char symbol = production.charAt(0);
-            if(isTerminal(symbol + "")){
-                first.get(nonTerminal).add(symbol + "");
-            } else if(isNonTerminal(symbol)){
+            if(isNonTerminal(symbol)){
                 first.get(nonTerminal).addAll(recFirst(symbol + ""));
+            } else {
+                String terminal = "";
+                int i = 0;
+                while(!isNonTerminal(symbol) && i < production.length()){
+                    terminal+=symbol;
+                    i++;
+                    if(i >= production.length()) break;
+                    symbol = production.charAt(i);
+                }
+                first.get(nonTerminal).add(terminal);
             }
-        } 
+        }
         return first.get(nonTerminal);
     }
     
@@ -109,6 +117,7 @@ public class CFGrammar {
     }
     
     private Set<String> getFollow(String nonTerminalP){
+        if(!follow.get(nonTerminalP).isEmpty()) return follow.get(nonTerminalP);
         for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
             String nonTerminal = entry.getKey();
             for(String production : this.grammarEquations.get(nonTerminal)){
@@ -175,6 +184,13 @@ public class CFGrammar {
     public void printFi(){
         System.out.println("First:");
         for(Map.Entry<String, Set<String>> entry : this.first.entrySet()){
+            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
+        }
+    }
+    
+    public void printFo(){
+        System.out.println("Follow:");
+        for(Map.Entry<String, Set<String>> entry : this.follow.entrySet()){
             System.out.println(entry.getKey() + ": " + entry.getValue().toString());
         }
     }
