@@ -34,11 +34,14 @@ public class CFGrammar {
         this.follow = new HashMap<>();
         this.mTable = new HashMap<>();
         init(grammarEq);
-        normalizeGE();
     }
     
     private boolean isNonTerminal(char symbol){
         return symbol >= 'A' && symbol <= 'Z';
+    }
+    
+    private boolean isNonTerminal(String symbol){
+        return nonTerminals.contains(symbol);
     }
     
     private boolean isTerminal(String symbol){
@@ -51,22 +54,39 @@ public class CFGrammar {
             String nonTerminal = splittedGE[0];
             String production = splittedGE[1];
             if(initialState.equals("")) initialState = nonTerminal;
-            if(first.get(nonTerminal) == null){
-                first.put(nonTerminal, new HashSet<>());
-                follow.put(nonTerminal, new HashSet<>());
+            if(this.grammarEquations.get(nonTerminal) == null){
                 this.grammarEquations.put(nonTerminal, new HashSet<>());
             }
             this.grammarEquations.get(nonTerminal).add(production);
-            nonTerminals.add(nonTerminal);
-            checkProduction(production);
         }
+        normalizeGE();
+        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
+            String nonTerminal = entry.getKey();
+            if(first.get(nonTerminal) == null){
+                first.put(nonTerminal, new HashSet<>());
+                follow.put(nonTerminal, new HashSet<>());   
+            }
+            nonTerminals.add(nonTerminal);
+            for(String production : entry.getValue()){
+                checkProduction(production);
+            }
+        }
+        System.out.println("Terminals:");
+        System.out.println(terminals);
+        System.out.println("Non terminals:");
+        System.out.println(nonTerminals);
+        System.out.println("");
     }
     
     private void checkProduction(String production){
         for(int i = 0; i < production.length(); i++){
             char symbol = production.charAt(i);
-            if(isNonTerminal(symbol)) nonTerminals.add(symbol + "");
-            else if(symbol != '&') terminals.add(symbol + "");
+            if(isNonTerminal(symbol)){
+                if(i + 1 < production.length() &&  "'".equals(production.charAt(i + 1))){
+                    nonTerminals.add(symbol + "'");
+                } else nonTerminals.add(symbol + "");
+            }
+            else if(symbol != '&' && !"'".equals(symbol)) terminals.add(symbol + "");
         }
     }
     
@@ -89,7 +109,7 @@ public class CFGrammar {
                     if(this.normalizedGE.get(auxNonTerminal) == null){
                         this.normalizedGE.put(auxNonTerminal, new HashSet<>());
                     }
-                    this.normalizedGE.get(auxNonTerminal).add(alpha);
+                    this.normalizedGE.get(auxNonTerminal).add(alpha + auxNonTerminal);
                 }
                 if(!production.contains(nonTerminal)) bethaSet.add(production + auxNonTerminal);
             }
@@ -103,25 +123,27 @@ public class CFGrammar {
     }
     
     public void getFirst(){
-        for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
+        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
-            System.out.println(nonTerminal + ": " + this.grammarEquations.get(nonTerminal));
-            //if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, "");
+            System.out.println(nonTerminal + ": " + this.normalizedGE.get(nonTerminal));
+            if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, "");
         }
     }
     
     private Set<String> recFirst(String nonTerminal, String lastNonTerminal){
         if(!first.get(nonTerminal).isEmpty()) return first.get(nonTerminal);
-        for(String production : this.grammarEquations.get(nonTerminal)){
-            char symbol = production.charAt(0);
-            if(isNonTerminal(symbol) && !lastNonTerminal.equals(symbol + "")){
-                if(!first.get(symbol + "").isEmpty()){
-                    first.get(nonTerminal).addAll(first.get(symbol + ""));
+        for(String production : this.normalizedGE.get(nonTerminal)){
+            char symbolC = production.charAt(0);
+            String symbol = symbolC + "";
+            if(1 < production.length() && "'".equals(production.charAt(1))) symbol+="'";
+            if(isNonTerminal(symbol) && !lastNonTerminal.equals(symbol)){
+                if(!first.get(symbol).isEmpty()){
+                    first.get(nonTerminal).addAll(first.get(symbol));
                 }else{
-                    first.get(nonTerminal).addAll(recFirst(symbol + "", nonTerminal));
+                    first.get(nonTerminal).addAll(recFirst(symbol, nonTerminal));
                 }
             } else if(!isNonTerminal(symbol)) {
-                first.get(nonTerminal).add(symbol + "");
+                first.get(nonTerminal).add(symbol);
             }
         }
         return first.get(nonTerminal);
@@ -134,8 +156,8 @@ public class CFGrammar {
     private Set<String> getFollow(String nonTerminalB, String lastNonTerminal){
         if(!follow.get(nonTerminalB).isEmpty()) return follow.get(nonTerminalB);
         if(doFirstRule(nonTerminalB)) follow.get(nonTerminalB).add("$");
-        for(String production : this.grammarEquations.get(nonTerminalB)) doSecondRule(production);
-        for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
+        for(String production : this.normalizedGE.get(nonTerminalB)) doSecondRule(production);
+        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
             if(nonTerminal.equals(lastNonTerminal)) continue;
             for(String production : entry.getValue()){
@@ -154,14 +176,22 @@ public class CFGrammar {
     private void doSecondRule(String production){
         if(production.length() == 1) return;
         for(int i = 0; i < production.length(); i++){
-            char nonTerminal = production.charAt(i);
+            char nonTerminalC = production.charAt(i);
+            if("'".equals(nonTerminalC)) continue;
+            String nonTerminal = nonTerminalC + "";
+            if(i + 1 < production.length() && "'".equals(production.charAt(i + 1))){
+                nonTerminal+="'";
+                i++;
+            }
             if(isNonTerminal(nonTerminal) && i + 1 < production.length()){
-                char betha = production.charAt(i + 1);
+                char bethaC = production.charAt(i + 1);
+                String betha = bethaC + "";
+                if(i + 1 < production.length() && "'".equals(production.charAt(i + 1))) betha+="'";
                 if(isNonTerminal(betha)){
-                    Set<String> bethaFirst = first.get(betha + "");
+                    Set<String> bethaFirst = first.get(betha);
                     bethaFirst.remove("&");
                     follow.get(nonTerminal + "").addAll(bethaFirst);
-                } else follow.get(nonTerminal + "").add(betha + ""); 
+                } else follow.get(nonTerminal).add(betha); 
             }
         }
     }
@@ -170,14 +200,21 @@ public class CFGrammar {
         if(!follow.get(nonTerminal).isEmpty()) return follow.get(nonTerminal);
         for(int i = 0; i < production.length(); i++){
             String symbol = production.charAt(i) + "";
+            if(symbol.equals("'")) continue;
+            if(i + 1 < production.length() && "'".equals(production.charAt(i + 1))){
+                symbol+="'";
+                i++;
+            }
             if(symbol.equals(nonTerminalB)){
                 if(i + 1 < production.length()){
-                    char betha = production.charAt(i + 1);
-                    if(isTerminal(betha + "")){
-                        follow.get(nonTerminalB).add(betha + "");
+                    char bethaC = production.charAt(i + 1);
+                    String betha = bethaC + "";
+                    if(i + 2 < production.length() && "'".equals(production.charAt(i + 2))) betha+="'";
+                    if(isTerminal(betha)){
+                        follow.get(nonTerminalB).add(betha);
                         continue;
                     }
-                    Set<String> bethaFirst = first.get(betha + "");
+                    Set<String> bethaFirst = first.get(betha);
                     if(bethaFirst.contains("&")){
                         if(!follow.get(nonTerminal).isEmpty()){
                             follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
