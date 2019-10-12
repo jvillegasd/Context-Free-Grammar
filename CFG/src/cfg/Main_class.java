@@ -18,6 +18,15 @@ public class Main_class {
      */
     public static void main(String[] args) {
         ArrayList<String> ge = new ArrayList<>();
+        test2(ge);
+        CFGrammar cfg = new CFGrammar(ge);
+        cfg.getFirst();
+        cfg.printFi();
+        cfg.getFollow();
+        cfg.printFo();
+    }
+    
+    private static void test1(ArrayList<String> ge){
         ge.add("E->A");
         ge.add("E->L");
         ge.add("A->n");
@@ -26,9 +35,15 @@ public class Main_class {
         ge.add("S->EF");
         ge.add("F->,S");
         ge.add("F->&");
-        CFGrammar cfg = new CFGrammar(ge);
-        cfg.getFirst();
-        cfg.printFi();
     }
     
+    private static void test2(ArrayList<String> ge){
+        ge.add("S->aAcF");
+        ge.add("S->cF");
+        ge.add("F->aF");
+        ge.add("F->&");
+        ge.add("A->baG");
+        ge.add("G->bG");
+        ge.add("G->&");
+    }
 }
