@@ -92,7 +92,9 @@ public class CFGrammar {
     public void getFollow(){
         for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
             String nonTerminal = entry.getKey();
-            recFollow(nonTerminal);
+            if(doFirstRule(nonTerminal)) follow.get(nonTerminal).add("$");
+            for(String production : this.grammarEquations.get(nonTerminal)) doSecondRule(production);
+            getFollow(nonTerminal);
         }
     }
     
@@ -115,30 +117,16 @@ public class CFGrammar {
         }
     }
     
-    private Set<String> recFollow(String nonTerminal){
-        if(doFirstRule(nonTerminal)) follow.get(nonTerminal).add("$");
-        for(String production : this.grammarEquations.get(nonTerminal)) doSecondRule(production);
-        doThirdRule(nonTerminal);
-        return follow.get(nonTerminal);
+    private void getFollow(String nonTerminal){
+        for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
+            for(String production : this.grammarEquations.get(nonTerminal)){
+                
+            }
+        }
     }
     
     private Set<String> doThirdRule(String nonTerminal){
-        for(String production : this.grammarEquations.get(nonTerminal)){
-            for(int i = 0; i < production.length(); i++){
-                char nonTerminalP = production.charAt(i);
-                if(isNonTerminal(nonTerminalP) && i + 1 < production.length()){
-                    char betha = production.charAt(i + 1);
-                    if(isNonTerminal(betha)){
-                        Set<String> bethaFirst = first.get(betha + "");
-                        if(bethaFirst.contains("&")){
-                            follow.get(nonTerminalP + "").addAll(recFollow(nonTerminal));
-                        }
-                    }
-                } else if(isNonTerminal(nonTerminalP)){
-
-                }
-            }
-        }
+        
         return follow.get(nonTerminal);
     }
     
