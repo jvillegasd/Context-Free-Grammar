@@ -98,6 +98,18 @@ public class CFGrammar {
         }
     }
     
+    private Set<String> getFollow(String nonTerminalP){
+        for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
+            String nonTerminal = entry.getKey();
+            for(String production : this.grammarEquations.get(nonTerminal)){
+                if(production.contains(nonTerminalP)){
+                    follow.get(nonTerminalP).addAll(doThirdRule(nonTerminal, production, nonTerminalP));
+                }
+            }
+        }
+        return follow.get(nonTerminalP);
+    }
+    
     private boolean doFirstRule(String nonTerminal){
         return nonTerminal.equals(initialState);
     }
@@ -117,16 +129,29 @@ public class CFGrammar {
         }
     }
     
-    private void getFollow(String nonTerminal){
-        for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
-            for(String production : this.grammarEquations.get(nonTerminal)){
-                
+    private Set<String> doThirdRule(String nonTerminal, String production, String nonTerminalP){
+        for(int i = 0; i < production.length(); i++){
+            String symbol = production.charAt(i) + "";
+            if(symbol.equals(nonTerminalP)){
+                if(i + 1 < production.length()){
+                    char betha = production.charAt(i + 1);
+                    Set<String> bethaFirst = first.get(betha + "");
+                    if(bethaFirst.contains("&")){
+                        if(!follow.get(nonTerminal).isEmpty()){
+                            follow.get(nonTerminalP).addAll(follow.get(nonTerminal));
+                        } else{
+                            follow.get(nonTerminalP).addAll(getFollow(nonTerminal));
+                        }
+                    }
+                } else{
+                    if(!follow.get(nonTerminal).isEmpty()){
+                        follow.get(nonTerminalP).addAll(follow.get(nonTerminal));
+                    } else{
+                        follow.get(nonTerminalP).addAll(getFollow(nonTerminal));
+                    }
+                }
             }
         }
-    }
-    
-    private Set<String> doThirdRule(String nonTerminal){
-        
         return follow.get(nonTerminal);
     }
     
@@ -135,5 +160,12 @@ public class CFGrammar {
         for(String t : terminals) System.out.print(t + "||");
         System.out.println("\nNon Terminals:");
         for(String nt : nonTerminals) System.out.print(nt + "||");
+    }
+    
+    public void printFi(){
+        System.out.println("First:");
+        for(Map.Entry<String, Set<String>> entry : this.first.entrySet()){
+            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
+        }
     }
 }

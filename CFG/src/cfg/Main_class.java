@@ -26,6 +26,8 @@ public class Main_class {
         ge.add("S->E,S");
         ge.add("S->E");
         CFGrammar cfg = new CFGrammar(ge);
+        cfg.getFirst();
+        cfg.printFi();
     }
     
 }
