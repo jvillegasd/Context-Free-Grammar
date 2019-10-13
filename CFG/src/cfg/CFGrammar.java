@@ -93,6 +93,7 @@ public class CFGrammar {
     
     private void normalizeGE(){
         removeLeftRec();
+        leftFactorization();
     }
     
     private void removeLeftRec(){
@@ -121,6 +122,10 @@ public class CFGrammar {
                 this.normalizedGE.get(auxNonTerminal).add("&");
             }
         }
+    }
+    
+    private void leftFactorization(){
+        
     }
     
     public void getFirst(){
