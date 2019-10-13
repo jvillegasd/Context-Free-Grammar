@@ -71,11 +71,6 @@ public class CFGrammar {
                 checkProduction(production);
             }
         }
-        System.out.println("Terminals:");
-        System.out.println(terminals);
-        System.out.println("Non terminals:");
-        System.out.println(nonTerminals);
-        System.out.println("");
     }
     
     private void checkProduction(String production){
@@ -123,7 +118,7 @@ public class CFGrammar {
             }
         }
     }
-    
+    //https://leetcode.com/problems/longest-common-prefix/solution/
     private void leftFactorization(){
         
     }
@@ -131,7 +126,6 @@ public class CFGrammar {
     public void getFirst(){
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
-            System.out.println(nonTerminal + ": " + this.normalizedGE.get(nonTerminal));
             if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, "");
         }
     }
@@ -240,7 +234,7 @@ public class CFGrammar {
         return follow.get(nonTerminal);
     }
     
-    private void print(){
+    public void print(){
         System.out.println("Terminals:");
         for(String t : terminals) System.out.print(t + "||");
         System.out.println("\nNon Terminals:");

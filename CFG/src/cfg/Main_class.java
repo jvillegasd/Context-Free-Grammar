@@ -24,6 +24,7 @@ public class Main_class {
         cfg.printFi();
         cfg.getFollow();
         cfg.printFo();
+        cfg.print();
     }
     
     private static void test11(ArrayList<String> ge){
