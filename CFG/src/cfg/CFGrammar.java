@@ -128,7 +128,7 @@ public class CFGrammar {
             for(String prefix : prefixSet){
                 Set<String> samePrefixSet = samePrefix(productionSet, prefix);
                 String LCP = longestCommonPrefix(samePrefixSet);
-                if(LCP.length() > 0){
+                if(LCP.length() > 0 && samePrefixSet.size() > 1){
                     factorized = true;
                     
                 }
