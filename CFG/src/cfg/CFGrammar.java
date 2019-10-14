@@ -118,9 +118,56 @@ public class CFGrammar {
             }
         }
     }
-    //https://leetcode.com/problems/longest-common-prefix/solution/
+    
     private void leftFactorization(){
-        
+        boolean factorized = false;
+        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
+            String nonTerminal = entry.getKey();
+            Set<String> productionSet = entry.getValue();
+            Set<String> prefixSet = getPrefix(productionSet);
+            for(String prefix : prefixSet){
+                Set<String> samePrefixSet = samePrefix(productionSet, prefix);
+                String LCP = longestCommonPrefix(samePrefixSet);
+                if(LCP.length() > 0){
+                    factorized = true;
+                    
+                }
+            }
+        }
+        if(factorized) leftFactorization();
+    }
+    
+    private Set<String> getPrefix(Set<String> productionSet){
+        Set<String> prefixSet = new HashSet<>();
+        for(String production : productionSet){
+            String prefix = production.charAt(0) + "";
+            prefixSet.add(prefix);
+        }
+        return prefixSet;
+    }
+    
+    private Set<String> samePrefix(Set<String> productionSet, String ogPrefix){
+        Set<String> samePrefixSet = new HashSet<>();
+        for(String production : productionSet){
+            String prefix = production.charAt(0) + "";
+            if(prefix.equals(ogPrefix)) samePrefixSet.add(production);
+        }
+        return samePrefixSet;
+    }
+    
+    private String longestCommonPrefix(Set<String> samePrefixSet) {
+        if(samePrefixSet == null || samePrefixSet.isEmpty()) return "";
+        String initialProd = samePrefixSet.iterator().next();
+        for(int i = 0; i < initialProd.length(); i++){
+            char symbol = initialProd.charAt(i);
+            for(String production : samePrefixSet){
+                if(production.equals(initialProd)) continue;
+                if(i == production.length() || production.charAt(i) != symbol){
+                    return initialProd.substring(0, i);
+                }
+            }
+        }
+        return initialProd;
     }
     
     public void getFirst(){
