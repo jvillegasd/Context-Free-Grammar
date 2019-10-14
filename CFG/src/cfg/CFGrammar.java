@@ -286,6 +286,10 @@ public class CFGrammar {
         for(String t : terminals) System.out.print(t + "||");
         System.out.println("\nNon Terminals:");
         for(String nt : nonTerminals) System.out.print(nt + "||");
+        System.out.println("");
+        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
+            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
+        }
     }
     
     public void printFi(){
