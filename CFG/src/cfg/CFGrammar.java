@@ -88,7 +88,7 @@ public class CFGrammar {
     
     private void normalizeGE(){
         removeLeftRec();
-        leftFactorization();
+        //leftFactorization();
     }
     
     private void removeLeftRec(){
@@ -173,21 +173,23 @@ public class CFGrammar {
     public void getFirst(){
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
-            if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, "");
+            if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, new HashSet<>());
         }
     }
     
-    private Set<String> recFirst(String nonTerminal, String lastNonTerminal){
+    private Set<String> recFirst(String nonTerminal, Set<String> lastGESet){
         if(!first.get(nonTerminal).isEmpty()) return first.get(nonTerminal);
         for(String production : this.normalizedGE.get(nonTerminal)){
+            if(lastGESet.contains(production)) continue;
             char symbolC = production.charAt(0);
             String symbol = symbolC + "";
             if(1 < production.length() && "'".equals(production.charAt(1) + "")) symbol+="'";
-            if(isNonTerminal(symbol) && !lastNonTerminal.equals(symbol)){
+            if(isNonTerminal(symbol)){
                 if(!first.get(symbol).isEmpty()){
                     first.get(nonTerminal).addAll(first.get(symbol));
                 }else{
-                    first.get(nonTerminal).addAll(recFirst(symbol, nonTerminal));
+                    lastGESet.add(production);
+                    first.get(nonTerminal).addAll(recFirst(symbol, lastGESet));
                 }
             } else if(isTerminal(symbolC + "") || symbolC == '&') {
                 first.get(nonTerminal).add(symbolC + "");

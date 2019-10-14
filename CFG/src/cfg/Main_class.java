@@ -28,7 +28,7 @@ public class Main_class {
         
     }
     
-    private static void test11(ArrayList<String> ge){
+    private static void test1(ArrayList<String> ge){
         ge.add("E->A");
         ge.add("E->L");
         ge.add("A->n");
@@ -38,33 +38,12 @@ public class Main_class {
         ge.add("S->E");
     }
     
-    private static void test1(ArrayList<String> ge){
-        ge.add("E->A");
-        ge.add("E->L");
-        ge.add("A->n");
-        ge.add("A->id");
-        ge.add("L->(S)");
-        ge.add("S->EF");
-        ge.add("F->,S");
-        ge.add("F->&");
-    }
-    
-    private static void test21(ArrayList<String> ge){
+    private static void test2(ArrayList<String> ge){
         ge.add("S->Sa");
         ge.add("S->aAc");
         ge.add("S->c");
         ge.add("A->Ab");
         ge.add("A->ba");
-    }
-    
-    private static void test2(ArrayList<String> ge){
-        ge.add("S->aAcF");
-        ge.add("S->cF");
-        ge.add("F->aF");
-        ge.add("F->&");
-        ge.add("A->baG");
-        ge.add("G->bG");
-        ge.add("G->&");
     }
     
     private static void test3(ArrayList<String> ge){
