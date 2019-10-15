@@ -304,7 +304,7 @@ public class CFGrammar {
                 }
             }
             if(symbol.equals(nonTerminalB)){
-                if(i + 1 < production.length()){
+                if(i + 1 < production.length()){ //Third rule - another NT next to current NT
                     i++;
                     char bethaC = production.charAt(i);
                     String betha = bethaC + "";
@@ -327,8 +327,8 @@ public class CFGrammar {
                             follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB, lastGE));
                         }
                     }
-                } else{
-                    if(!follow.get(nonTerminal).isEmpty()){
+                } else { //Third rule - current NT next to Alpha
+                    if(!follow.get(nonTerminal).isEmpty()){ 
                         follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
                     } else{
                         follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB, lastGE));
