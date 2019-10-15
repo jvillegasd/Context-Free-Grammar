@@ -136,8 +136,6 @@ public class CFGrammar {
                 String LCP = longestCommonPrefix(samePrefixSet);
                 if(LCP.length() > 0 && samePrefixSet.size() > 1){
                     factorized = true;
-                    System.out.println("prefix: " + LCP);
-                    System.out.println("sameSet: " + samePrefixSet.toString());
                     normalizedGE.get(nonTerminal).removeAll(samePrefixSet);
                     Set<String> newProductions = deletePrefix(prefix, samePrefixSet);
                     String auxNonTerminal = getAuxNonTerminal(nonTerminal);
@@ -232,10 +230,10 @@ public class CFGrammar {
     }
     
     public void getFollow(){
-        for(String nonTerminal : nonTerminals) getFollow(nonTerminal, "", new HashSet<>());
+        for(String nonTerminal : nonTerminals) recFollow(nonTerminal, "", new HashSet<>());
     }
     
-    private Set<String> getFollow(String nonTerminalB, String lastNonTerminal, Set<String> lastGE){
+    private Set<String> recFollow(String nonTerminalB, String lastNonTerminal, Set<String> lastGE){
         if(doFirstRule(nonTerminalB)) follow.get(nonTerminalB).add("$");
         for(String production : this.normalizedGE.get(nonTerminalB)) doSecondRule(production);
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
@@ -324,14 +322,14 @@ public class CFGrammar {
                         if(!follow.get(nonTerminal).isEmpty()){
                             follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
                         } else{
-                            follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB, lastGE));
+                            follow.get(nonTerminalB).addAll(recFollow(nonTerminal, nonTerminalB, lastGE));
                         }
                     }
                 } else { //Third rule - current NT next to Alpha
                     if(!follow.get(nonTerminal).isEmpty()){ 
                         follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
                     } else{
-                        follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB, lastGE));
+                        follow.get(nonTerminalB).addAll(recFollow(nonTerminal, nonTerminalB, lastGE));
                     }
                 }
             }
