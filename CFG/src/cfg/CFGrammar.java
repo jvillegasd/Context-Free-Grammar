@@ -260,6 +260,7 @@ public class CFGrammar {
     private void doSecondRule(String production){
         if(production.length() == 1) return;
         for(int i = 0; i < production.length(); i++){
+            int aux = i;
             char nonTerminalC = production.charAt(i);
             if("'".equals(nonTerminalC + "")) continue;
             String nonTerminal = nonTerminalC + "";
@@ -287,12 +288,14 @@ public class CFGrammar {
                     follow.get(nonTerminal + "").addAll(bethaFirst);
                 } else follow.get(nonTerminal).add(betha); 
             }
+            i = aux;
         }
     }
     
     private Set<String> doThirdRule(String nonTerminal, String production, String nonTerminalB, Set<String> lastGE){
         if(!follow.get(nonTerminal).isEmpty()) return follow.get(nonTerminal);
         for(int i = 0; i < production.length(); i++){
+            int aux = i;
             String symbol = production.charAt(i) + "";
             if(symbol.equals("'")) continue;
             if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
@@ -334,6 +337,7 @@ public class CFGrammar {
                     }
                 }
             }
+            i = aux;
         }
         return follow.get(nonTerminal);
     }

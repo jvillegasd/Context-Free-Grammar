@@ -55,7 +55,7 @@ public class Main_class {
         ge.add("F->(E)"); 
     }
     
-    private static void test4(ArrayList<String> ge){
+    private static void test4(ArrayList<String> ge){ //Gramatica Ambigua
         ge.add("E->E+T");
         ge.add("E->E-T");
         ge.add("E->T");
@@ -74,5 +74,19 @@ public class Main_class {
         ge.add("S->abcd");
         ge.add("S->e");
         ge.add("S->f");
+    }
+    
+    private static void test6(ArrayList<String> ge){
+        ge.add("A->BCDEfG");
+        ge.add("B->b");
+        ge.add("B->&");
+        ge.add("C->c");
+        ge.add("C->&");
+        ge.add("D->d");
+        ge.add("D->&");
+        ge.add("E->e");
+        ge.add("E->&");
+        ge.add("G->g");
+        ge.add("G->&");
     }
 }
