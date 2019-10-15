@@ -84,6 +84,7 @@ public class CFGrammar {
                     symbol+="'";
                     i++;
                 }
+                i--;
                 nonTerminals.add(symbol);
             }
             else if(symbolC != '&' && !"'".equals(symbolC + "")) terminals.add(symbolC + "");
@@ -146,7 +147,7 @@ public class CFGrammar {
                 }
             }
         }
-        //if(factorized) leftFactorization();
+        if(factorized) leftFactorization();
     }
     
     private Set<String> getPrefix(Set<String> productionSet){
@@ -231,10 +232,10 @@ public class CFGrammar {
     }
     
     public void getFollow(){
-        for(String nonTerminal : nonTerminals) getFollow(nonTerminal, "");
+        for(String nonTerminal : nonTerminals) getFollow(nonTerminal, "", new HashSet<>());
     }
     
-    private Set<String> getFollow(String nonTerminalB, String lastNonTerminal){
+    private Set<String> getFollow(String nonTerminalB, String lastNonTerminal, Set<String> lastGE){
         if(!follow.get(nonTerminalB).isEmpty()) return follow.get(nonTerminalB);
         if(doFirstRule(nonTerminalB)) follow.get(nonTerminalB).add("$");
         for(String production : this.normalizedGE.get(nonTerminalB)) doSecondRule(production);
@@ -242,8 +243,10 @@ public class CFGrammar {
             String nonTerminal = entry.getKey();
             if(nonTerminal.equals(lastNonTerminal)) continue;
             for(String production : entry.getValue()){
+                if(lastGE.contains(production)) continue;
                 if(production.contains(nonTerminalB)){
-                    follow.get(nonTerminalB).addAll(doThirdRule(nonTerminal, production, nonTerminalB));
+                    lastGE.add(production);
+                    follow.get(nonTerminalB).addAll(doThirdRule(nonTerminal, production, nonTerminalB, lastGE));
                 }
             }
         }
@@ -265,11 +268,12 @@ public class CFGrammar {
                 while(i < production.length() && "'".equals(production.charAt(i) + "")){
                     nonTerminal+="'";
                     i++;
-                }       
+                }
             }
             if(isNonTerminal(nonTerminal) && i + 1 < production.length()){
-                char bethaC = production.charAt(i + 1);
-                String betha = bethaC + "";
+                i++;
+                char bethaC = production.charAt(i);
+                String betha = bethaC + ""; 
                 if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
                     i++;
                     while(i < production.length() && "'".equals(production.charAt(i) + "")){
@@ -286,7 +290,7 @@ public class CFGrammar {
         }
     }
     
-    private Set<String> doThirdRule(String nonTerminal, String production, String nonTerminalB){
+    private Set<String> doThirdRule(String nonTerminal, String production, String nonTerminalB, Set<String> lastGE){
         if(!follow.get(nonTerminal).isEmpty()) return follow.get(nonTerminal);
         for(int i = 0; i < production.length(); i++){
             String symbol = production.charAt(i) + "";
@@ -319,14 +323,14 @@ public class CFGrammar {
                         if(!follow.get(nonTerminal).isEmpty()){
                             follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
                         } else{
-                            follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB));
+                            follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB, lastGE));
                         }
                     }
                 } else{
                     if(!follow.get(nonTerminal).isEmpty()){
                         follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
                     } else{
-                        follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB));
+                        follow.get(nonTerminalB).addAll(getFollow(nonTerminal, nonTerminalB, lastGE));
                     }
                 }
             }
