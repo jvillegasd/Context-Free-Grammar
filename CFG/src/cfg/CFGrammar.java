@@ -236,7 +236,6 @@ public class CFGrammar {
     }
     
     private Set<String> getFollow(String nonTerminalB, String lastNonTerminal, Set<String> lastGE){
-        if(!follow.get(nonTerminalB).isEmpty()) return follow.get(nonTerminalB);
         if(doFirstRule(nonTerminalB)) follow.get(nonTerminalB).add("$");
         for(String production : this.normalizedGE.get(nonTerminalB)) doSecondRule(production);
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
@@ -293,7 +292,6 @@ public class CFGrammar {
     }
     
     private Set<String> doThirdRule(String nonTerminal, String production, String nonTerminalB, Set<String> lastGE){
-        if(!follow.get(nonTerminal).isEmpty()) return follow.get(nonTerminal);
         for(int i = 0; i < production.length(); i++){
             int aux = i;
             String symbol = production.charAt(i) + "";
