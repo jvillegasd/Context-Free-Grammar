@@ -75,26 +75,30 @@ public class CFGrammar {
     
     private void checkProduction(String production){
         for(int i = 0; i < production.length(); i++){
-            char symbol = production.charAt(i);
-            if("'".equals(symbol + "")) continue;
-            if(isNonTerminal(symbol)){
-                if(i + 1 < production.length() &&  "'".equals(production.charAt(i + 1) + "")){
-                    nonTerminals.add(symbol + "'");
-                } else nonTerminals.add(symbol + "");
+            char symbolC = production.charAt(i);
+            if("'".equals(symbolC + "")) continue;
+            if(isNonTerminal(symbolC)){
+                String symbol = symbolC + "";
+                i++;
+                while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                    symbol+="'";
+                    i++;
+                }
+                nonTerminals.add(symbol);
             }
-            else if(symbol != '&' && !"'".equals(symbol + "")) terminals.add(symbol + "");
+            else if(symbolC != '&' && !"'".equals(symbolC + "")) terminals.add(symbolC + "");
         }
     }
     
     private void normalizeGE(){
         removeLeftRec();
-        //leftFactorization();
+        leftFactorization();
     }
     
     private void removeLeftRec(){
         for(Map.Entry<String, Set<String>> entry : this.grammarEquations.entrySet()){
             String nonTerminal = entry.getKey();
-            String auxNonTerminal = nonTerminal + "'";
+            String auxNonTerminal = getAuxNonTerminal(nonTerminal);
             boolean isRemoved = false;
             this.normalizedGE.put(nonTerminal, new HashSet<>());
             Set<String> bethaSet = new HashSet<>();
@@ -121,7 +125,8 @@ public class CFGrammar {
     
     private void leftFactorization(){
         boolean factorized = false;
-        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
+        HashMap<String, Set<String>> auxNormalizedGE = (HashMap<String, Set<String>>)this.normalizedGE.clone();
+        for(Map.Entry<String, Set<String>> entry : auxNormalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
             Set<String> productionSet = entry.getValue();
             Set<String> prefixSet = getPrefix(productionSet);
@@ -130,11 +135,18 @@ public class CFGrammar {
                 String LCP = longestCommonPrefix(samePrefixSet);
                 if(LCP.length() > 0 && samePrefixSet.size() > 1){
                     factorized = true;
-                    
+                    System.out.println("prefix: " + LCP);
+                    System.out.println("sameSet: " + samePrefixSet.toString());
+                    normalizedGE.get(nonTerminal).removeAll(samePrefixSet);
+                    Set<String> newProductions = deletePrefix(prefix, samePrefixSet);
+                    String auxNonTerminal = getAuxNonTerminal(nonTerminal);
+                    normalizedGE.put(auxNonTerminal, new HashSet<>());
+                    normalizedGE.get(auxNonTerminal).addAll(newProductions);
+                    normalizedGE.get(nonTerminal).add(prefix + auxNonTerminal);
                 }
             }
         }
-        if(factorized) leftFactorization();
+        //if(factorized) leftFactorization();
     }
     
     private Set<String> getPrefix(Set<String> productionSet){
@@ -170,6 +182,22 @@ public class CFGrammar {
         return initialProd;
     }
     
+    private Set<String> deletePrefix(String prefix, Set<String> samePrefixSet){
+        Set<String> newProductions = new HashSet<>();
+        for(String production : samePrefixSet){
+            String newProduction = production.substring(prefix.length());
+            if(newProduction.isEmpty()) newProduction = "&";
+            newProductions.add(newProduction);
+        }
+        return newProductions;
+    }
+    
+    private String getAuxNonTerminal(String nonTerminal){
+        String auxNonTerminal = nonTerminal + "'";
+        while(normalizedGE.get(auxNonTerminal) != null) auxNonTerminal+="'";
+        return auxNonTerminal;
+    }
+    
     public void getFirst(){
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
@@ -183,7 +211,11 @@ public class CFGrammar {
             if(lastGESet.contains(production)) continue;
             char symbolC = production.charAt(0);
             String symbol = symbolC + "";
-            if(1 < production.length() && "'".equals(production.charAt(1) + "")) symbol+="'";
+            int i = 1;
+            while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                symbol+="'";
+                i++;
+            }
             if(isNonTerminal(symbol)){
                 if(!first.get(symbol).isEmpty()){
                     first.get(nonTerminal).addAll(first.get(symbol));
@@ -229,13 +261,22 @@ public class CFGrammar {
             if("'".equals(nonTerminalC + "")) continue;
             String nonTerminal = nonTerminalC + "";
             if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
-                nonTerminal+="'";
                 i++;
+                while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                    nonTerminal+="'";
+                    i++;
+                }       
             }
             if(isNonTerminal(nonTerminal) && i + 1 < production.length()){
                 char bethaC = production.charAt(i + 1);
                 String betha = bethaC + "";
-                if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")) betha+="'";
+                if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
+                    i++;
+                    while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                        betha+="'";
+                        i++;
+                    }
+                }
                 if(isNonTerminal(betha)){
                     Set<String> bethaFirst = first.get(betha);
                     bethaFirst.remove("&");
@@ -251,14 +292,24 @@ public class CFGrammar {
             String symbol = production.charAt(i) + "";
             if(symbol.equals("'")) continue;
             if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
-                symbol+="'";
                 i++;
+                while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                    symbol+="'";
+                    i++;
+                }
             }
             if(symbol.equals(nonTerminalB)){
                 if(i + 1 < production.length()){
-                    char bethaC = production.charAt(i + 1);
+                    i++;
+                    char bethaC = production.charAt(i);
                     String betha = bethaC + "";
-                    if(i + 2 < production.length() && "'".equals(production.charAt(i + 2) + "")) betha+="'";
+                    if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
+                        i++;
+                        while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                            betha+="'";
+                            i++;
+                        }
+                    }
                     if(isTerminal(betha)){
                         follow.get(nonTerminalB).add(betha);
                         continue;

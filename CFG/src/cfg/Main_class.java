@@ -18,7 +18,7 @@ public class Main_class {
      */
     public static void main(String[] args) {
         ArrayList<String> ge = new ArrayList<>();
-        test4(ge);
+        test1(ge);
         CFGrammar cfg = new CFGrammar(ge);
         cfg.print();
         cfg.getFirst();
