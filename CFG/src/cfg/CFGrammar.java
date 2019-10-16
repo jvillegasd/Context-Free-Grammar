@@ -242,19 +242,18 @@ public class CFGrammar {
     }
     
     public void getFollow(){
-        for(String nonTerminal : nonTerminals) recFollow(nonTerminal, "", new HashSet<>());
+        for(String nonTerminal : nonTerminals) recFollow(nonTerminal, new HashSet<>());
     }
     
-    private Set<String> recFollow(String nonTerminalB, String lastNonTerminal, Set<String> lastGE){
+    private Set<String> recFollow(String nonTerminalB, Set<String> lastGE){
         if(doFirstRule(nonTerminalB)) follow.get(nonTerminalB).add("$");
-        for(String production : this.normalizedGE.get(nonTerminalB)) doSecondRule(production);
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
-            if(nonTerminal.equals(lastNonTerminal)) continue;
-            for(String production : entry.getValue()){
+            for(String production : this.normalizedGE.get(nonTerminal)){
                 if(lastGE.contains(production)) continue;
+                doSecondRule(production);
                 if(production.contains(nonTerminalB)){
-                    lastGE.add(production);
+                    lastGE.add(production); 
                     follow.get(nonTerminalB).addAll(doThirdRule(nonTerminal, production, nonTerminalB, lastGE));
                 }
             }
@@ -293,8 +292,11 @@ public class CFGrammar {
                 }
                 if(isNonTerminal(betha)){
                     Set<String> bethaFirst = first.get(betha);
-                    bethaFirst.remove("&");
-                    follow.get(nonTerminal + "").addAll(bethaFirst);
+                    if(bethaFirst.contains("&")){
+                        bethaFirst.remove("&");
+                        follow.get(nonTerminal).addAll(bethaFirst);
+                        bethaFirst.add("&");
+                    } else follow.get(nonTerminal).addAll(bethaFirst);
                 } else follow.get(nonTerminal).add(betha); 
             }
             i = aux;
@@ -305,7 +307,7 @@ public class CFGrammar {
         for(int i = 0; i < production.length(); i++){
             int aux = i;
             String symbol = production.charAt(i) + "";
-            if(symbol.equals("'")) continue;
+            if(symbol.equals("'") || isTerminal(symbol)) continue;
             if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
                 i++;
                 while(i < production.length() && "'".equals(production.charAt(i) + "")){
@@ -316,6 +318,7 @@ public class CFGrammar {
             if(symbol.equals(nonTerminalB)){
                 if(i + 1 < production.length()){ //Third rule - another NT next to current NT
                     i++;
+                    int startBetha = i, endBetha = i + 1;
                     char bethaC = production.charAt(i);
                     String betha = bethaC + "";
                     if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
@@ -324,30 +327,28 @@ public class CFGrammar {
                             betha+="'";
                             i++;
                         }
+                        endBetha = i;
                     }
                     if(isTerminal(betha)){
-                        follow.get(nonTerminalB).add(betha);
+                        if(follow.get(nonTerminalB).contains("$") && !nonTerminalB.equals(initialState)){
+                            follow.get(nonTerminalB).remove("$");
+                        }
                         continue;
                     }
                     Set<String> bethaFirst = first.get(betha);
                     if(bethaFirst.contains("&")){
-                        if(!follow.get(nonTerminal).isEmpty()){
-                            follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
-                        } else{
-                            follow.get(nonTerminalB).addAll(recFollow(nonTerminal, nonTerminalB, lastGE));
-                        }
+                        follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
+                        String bethaEpsilon = production.substring(0, startBetha) + production.substring(endBetha);
+                        doSecondRule(bethaEpsilon);
+                        follow.get(nonTerminalB).addAll(doThirdRule(nonTerminal, bethaEpsilon, nonTerminalB, lastGE));
                     }
                 } else { //Third rule - current NT next to Alpha
-                    if(!follow.get(nonTerminal).isEmpty()){ 
-                        follow.get(nonTerminalB).addAll(follow.get(nonTerminal));
-                    } else{
-                        follow.get(nonTerminalB).addAll(recFollow(nonTerminal, nonTerminalB, lastGE));
-                    }
+                    follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
                 }
             }
             i = aux;
         }
-        return follow.get(nonTerminal);
+        return follow.get(nonTerminalB);
     }
     
     public void print(){
