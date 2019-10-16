@@ -211,22 +211,31 @@ public class CFGrammar {
         if(!first.get(nonTerminal).isEmpty()) return first.get(nonTerminal);
         for(String production : this.normalizedGE.get(nonTerminal)){
             if(lastGESet.contains(production)) continue;
-            char symbolC = production.charAt(0);
-            String symbol = symbolC + "";
-            int i = 1;
-            while(i < production.length() && "'".equals(production.charAt(i) + "")){
-                symbol+="'";
-                i++;
-            }
-            if(isNonTerminal(symbol)){
-                if(!first.get(symbol).isEmpty()){
-                    first.get(nonTerminal).addAll(first.get(symbol));
-                }else{
-                    lastGESet.add(production);
-                    first.get(nonTerminal).addAll(recFirst(symbol, lastGESet));
+            for(int i = 0; i < production.length(); i++){
+                char symbolC = production.charAt(i);
+                String symbol = symbolC + "";
+                if(symbol.equals("'")) continue;
+                if(i + 1 < production.length() && "'".equals(production.charAt(i + 1) + "")){
+                    i++;
+                    while(i < production.length() && "'".equals(production.charAt(i) + "")){
+                        symbol+="'";
+                        i++;
+                    }
                 }
-            } else if(isTerminal(symbolC + "") || symbolC == '&') {
-                first.get(nonTerminal).add(symbolC + "");
+                if(isNonTerminal(symbol)){
+                    if(!first.get(symbol).isEmpty()){
+                        first.get(nonTerminal).addAll(first.get(symbol));
+                        if(!first.get(symbol).contains("&")) break;
+                    }else{
+                        lastGESet.add(production);
+                        Set<String> firstSymbol = recFirst(symbol, lastGESet);
+                        first.get(nonTerminal).addAll(firstSymbol);
+                        if(!firstSymbol.contains("&")) break;
+                    }
+                } else if(isTerminal(symbolC + "") || symbolC == '&') {
+                    first.get(nonTerminal).add(symbolC + "");
+                    break;
+                }
             }
         }
         return first.get(nonTerminal);
