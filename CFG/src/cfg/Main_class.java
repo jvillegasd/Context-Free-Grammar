@@ -89,4 +89,16 @@ public class Main_class {
         ge.add("G->g");
         ge.add("G->&");
     }
+    
+    private static void test7(ArrayList<String> ge){
+        ge.add("A->BCBDe");
+        ge.add("A->z");
+        ge.add("B->aBB");
+        ge.add("B->aBbB");
+        ge.add("B->&");
+        ge.add("C->DeF");
+        ge.add("C->&");
+        ge.add("D->abcd");
+        ge.add("F->f");
+    }
 }
