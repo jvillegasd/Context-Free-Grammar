@@ -337,10 +337,12 @@ public class CFGrammar {
                     }
                     Set<String> bethaFirst = first.get(betha);
                     if(bethaFirst.contains("&")){
-                        follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
                         String bethaEpsilon = production.substring(0, startBetha) + production.substring(endBetha);
                         doSecondRule(bethaEpsilon);
                         follow.get(nonTerminalB).addAll(doThirdRule(nonTerminal, bethaEpsilon, nonTerminalB, lastGE));
+                        if(follow.get(nonTerminalB).isEmpty()){
+                            follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
+                        }
                     }
                 } else { //Third rule - current NT next to Alpha
                     follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
