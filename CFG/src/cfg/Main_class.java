@@ -18,13 +18,13 @@ public class Main_class {
      */
     public static void main(String[] args) {
         ArrayList<String> ge = new ArrayList<>();
-        test3(ge);
+        test6(ge);
         CFGrammar cfg = new CFGrammar(ge);
         cfg.print();
-        cfg.getFirst();
+        cfg.computeSets();
         cfg.printFi();
-        cfg.getFollow();
         cfg.printFo();
+        LL1Algorithm ll1 = new LL1Algorithm(cfg);
         
     }
     

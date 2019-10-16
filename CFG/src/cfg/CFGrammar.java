@@ -25,7 +25,6 @@ public class CFGrammar {
     private HashMap<String, Set<String>> follow;
     private HashMap<String, Set<String>> grammarEquations = null;
     private HashMap<String, Set<String>> normalizedGE = null;
-    private HashMap<String, HashMap<String, String>> mTable;
     private String initialState = "";
     
     public CFGrammar(ArrayList<String> grammarEq){
@@ -35,7 +34,6 @@ public class CFGrammar {
         this.nonTerminals = new HashSet<>();
         this.first = new HashMap<>();
         this.follow = new HashMap<>();
-        this.mTable = new HashMap<>();
         init(grammarEq);
     }
     
@@ -200,7 +198,12 @@ public class CFGrammar {
         return auxNonTerminal;
     }
     
-    public void getFirst(){
+    public void computeSets(){
+        computeFirst();
+        computeFollow();
+    }
+    
+    private void computeFirst(){
         for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
             String nonTerminal = entry.getKey();
             if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, new HashSet<>());
@@ -241,7 +244,7 @@ public class CFGrammar {
         return first.get(nonTerminal);
     }
     
-    public void getFollow(){
+    private void computeFollow(){
         for(String nonTerminal : nonTerminals) recFollow(nonTerminal, new HashSet<>());
     }
     
@@ -351,6 +354,26 @@ public class CFGrammar {
             i = aux;
         }
         return follow.get(nonTerminalB);
+    }
+
+    public Set<String> getNonTerminals() {
+        return nonTerminals;
+    }
+
+    public Set<String> getTerminals() {
+        return terminals;
+    }
+
+    public HashMap<String, Set<String>> getFirst() {
+        return first;
+    }
+
+    public HashMap<String, Set<String>> getFollow() {
+        return follow;
+    }
+
+    public HashMap<String, Set<String>> getNormalizedGE() {
+        return normalizedGE;
     }
     
     public void print(){
