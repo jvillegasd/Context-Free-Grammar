@@ -24,7 +24,7 @@ public class Main_class {
         cfg.computeSets();
         cfg.printFi();
         cfg.printFo();
-        LL1Algorithm ll1 = new LL1Algorithm(cfg);
+        //LL1Algorithm ll1 = new LL1Algorithm(cfg);
         
     }
     

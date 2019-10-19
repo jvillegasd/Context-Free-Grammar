@@ -204,9 +204,18 @@ public class CFGrammar {
     }
     
     private void computeFirst(){
-        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
-            String nonTerminal = entry.getKey();
+        for(String nonTerminal : this.nonTerminals){
             if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, new HashSet<>());
+            boolean hasEpsilonOnProd = false;
+            for(String production : this.normalizedGE.get(nonTerminal)){
+                if(production.contains("&")){
+                    hasEpsilonOnProd = true;
+                    break;
+                }
+            }
+            if(first.get(nonTerminal).contains("&") && !hasEpsilonOnProd){
+                first.get(nonTerminal).remove("&");
+            }
         }
     }
     
