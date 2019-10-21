@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  *
- * @author Visitante
+ * @author LinkRs
  */
 public class LL1Algorithm {
     
