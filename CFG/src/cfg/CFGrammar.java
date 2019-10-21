@@ -1,11 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- * Notes:
- * NT = Non Termimals
- * GE = Grammatical Expression
- */
 package cfg;
 
 import java.util.ArrayList;
@@ -17,6 +9,9 @@ import java.util.Set;
 /**
  *
  * @author LinkRs
+ * Notes:
+ * NT: Non Terminal
+ * GE: Grammar Equation
  */
 public class CFGrammar {
     private Set<String> nonTerminals = null;
@@ -25,6 +20,7 @@ public class CFGrammar {
     private HashMap<String, Set<String>> follow;
     private HashMap<String, Set<String>> grammarEquations = null;
     private HashMap<String, Set<String>> normalizedGE = null;
+    private HashMap<String, HashMap<String, String>> mTableFirstRule = null;
     private String initialState = "";
     
     public CFGrammar(ArrayList<String> grammarEq){
@@ -34,6 +30,7 @@ public class CFGrammar {
         this.nonTerminals = new HashSet<>();
         this.first = new HashMap<>();
         this.follow = new HashMap<>();
+        this.mTableFirstRule = new HashMap<>();
         init(grammarEq);
     }
     
@@ -71,6 +68,12 @@ public class CFGrammar {
             for(String production : entry.getValue()){
                 checkProduction(production);
             }
+        }
+        for(String nonTerminal : nonTerminals){
+            for(String terminal : terminals){
+                mTableFirstRule.put(nonTerminal, new HashMap<>());
+            }
+            mTableFirstRule.put(nonTerminal, new HashMap<>());
         }
     }
     
@@ -237,15 +240,26 @@ public class CFGrammar {
                 if(isNonTerminal(symbol)){
                     if(!first.get(symbol).isEmpty()){
                         first.get(nonTerminal).addAll(first.get(symbol));
+                        for(String terminal : first.get(symbol)){ //M Table First Rule
+                            if(terminal.equals("&")) continue;
+                            mTableFirstRule.get(nonTerminal).put(terminal, production);
+                        }
                         if(!first.get(symbol).contains("&")) break;
                     }else{
                         lastGESet.add(production);
                         Set<String> firstSymbol = recFirst(symbol, lastGESet);
                         first.get(nonTerminal).addAll(firstSymbol);
+                        for(String terminal : firstSymbol){ //M Table First Rule
+                            if(terminal.equals("&")) continue;
+                            mTableFirstRule.get(nonTerminal).put(terminal, production);
+                        }
                         if(!firstSymbol.contains("&")) break;
                     }
                 } else if(isTerminal(symbolC + "") || symbolC == '&') {
                     first.get(nonTerminal).add(symbolC + "");
+                    if(symbolC != '&'){ //M Table First Rule
+                        mTableFirstRule.get(nonTerminal).put(symbolC + "", production); 
+                    }
                     break;
                 }
             }
@@ -383,6 +397,10 @@ public class CFGrammar {
 
     public HashMap<String, Set<String>> getNormalizedGE() {
         return normalizedGE;
+    }
+
+    public HashMap<String, HashMap<String, String>> getmTableFirstRule() {
+        return mTableFirstRule;
     }
     
     public void print(){

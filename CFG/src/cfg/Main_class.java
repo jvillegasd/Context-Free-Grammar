@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cfg;
 
 import java.util.ArrayList;
@@ -24,7 +19,9 @@ public class Main_class {
         cfg.computeSets();
         cfg.printFi();
         cfg.printFo();
-        //LL1Algorithm ll1 = new LL1Algorithm(cfg);
+        LL1Algorithm ll1 = new LL1Algorithm(cfg);
+        ll1.computeMTable();
+        ll1.printMTable();
         
     }
     
