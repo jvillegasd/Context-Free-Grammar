@@ -13,7 +13,7 @@ public class Main_class {
      */
     public static void main(String[] args) {
         ArrayList<String> ge = new ArrayList<>();
-        test6(ge);
+        test9(ge);
         CFGrammar cfg = new CFGrammar(ge);
         cfg.print();
         cfg.computeSets();
@@ -97,5 +97,23 @@ public class Main_class {
         ge.add("C->&");
         ge.add("D->abcd");
         ge.add("F->f");
+    }
+    
+    private static void test8(ArrayList<String> ge){
+        ge.add("A->BCeFG");
+        ge.add("B->b");
+        ge.add("C->c");
+        ge.add("C->&");
+        ge.add("F->f");
+        ge.add("F->&");
+        ge.add("G->g");
+        ge.add("G->&");
+    }
+    
+    private static void test9(ArrayList<String> ge){
+        ge.add("S->xyN");
+        ge.add("N->zS");
+        ge.add("N->z");
+        ge.add("N->&");
     }
 }

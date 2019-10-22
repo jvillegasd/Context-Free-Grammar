@@ -2,6 +2,7 @@ package cfg;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  *
@@ -37,6 +38,58 @@ public class LL1Algorithm {
                     mTable.get(nonTerminal).put("$", "&");
                 }
             }
+        }
+    }
+    
+    public boolean acceptedWord(String word){
+        boolean accepted = false;
+        Stack<String> stack = new Stack<>();
+        stack.push("$");
+        word+="$";
+        String ae = word.charAt(0) + "";
+        int idx = 0;
+        do {
+            String X = stack.peek();
+            if(isTerminal(X) || X.equals("$")){
+                if(X.equals(ae)){
+                    stack.pop();
+                    idx++;
+                } else {
+                    System.out.println("Error!");
+                }
+            } else {
+                if(produce(X, ae)){
+                    String production = mTable.get(X).get(ae);
+                    String swappedProd = swapProduction(production);
+                    pushOnStack(stack, swappedProd);
+                } else {
+                    System.out.println("Error!");
+                }
+            }
+            idx++;
+            if(idx < word.length()) ae = word.charAt(idx) + "";
+        } while(!stack.isEmpty() && idx < word.length() && stack.peek().equals("$"));
+        if(stack.peek().equals("$")) accepted = true;
+        return accepted;
+    }
+    
+    private boolean isTerminal(String symbol){
+        return terminals.contains(symbol);
+    }
+    
+    private boolean produce(String nonTerminal, String terminal){
+        return mTable.get(nonTerminal).get(terminal) != null;
+    }
+    
+    private String swapProduction(String production){
+        String swappedProd = "";
+        return swappedProd;
+    }
+    
+    private void pushOnStack(Stack<String> stack, String swappedProd){
+        for(int i = swappedProd.length() - 1; i >= 0; i--){
+            String symbol = swappedProd.charAt(i) + "";
+            stack.add(symbol);
         }
     }
     
