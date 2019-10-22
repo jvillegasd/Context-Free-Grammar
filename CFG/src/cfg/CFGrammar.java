@@ -402,6 +402,10 @@ public class CFGrammar {
     public HashMap<String, HashMap<String, String>> getmTableFirstRule() {
         return mTableFirstRule;
     }
+
+    public String getInitialState() {
+        return initialState;
+    }
     
     public void print(){
         System.out.println("Terminals:");

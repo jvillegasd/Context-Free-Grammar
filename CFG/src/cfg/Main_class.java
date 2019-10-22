@@ -13,7 +13,7 @@ public class Main_class {
      */
     public static void main(String[] args) {
         ArrayList<String> ge = new ArrayList<>();
-        test9(ge);
+        test1(ge);
         CFGrammar cfg = new CFGrammar(ge);
         cfg.print();
         cfg.computeSets();
@@ -22,7 +22,7 @@ public class Main_class {
         LL1Algorithm ll1 = new LL1Algorithm(cfg);
         ll1.computeMTable();
         ll1.printMTable();
-        
+        System.out.println(ll1.acceptedWord("(id,id,n)"));
     }
     
     private static void test1(ArrayList<String> ge){
