@@ -5,6 +5,17 @@
  */
 package cfg;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author redes
@@ -14,6 +25,11 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
+    
+    private CFGrammar cfg = null;
+    private LL1Algorithm ll1 = null;
+    private ArrayList<String> ge = null;
+    
     public GUI() {
         initComponents();
     }
@@ -53,8 +69,18 @@ public class GUI extends javax.swing.JFrame {
         routeLabel.setText("Ruta de archivo:");
 
         loadBT.setText("Cargar Gramatica");
+        loadBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadBTActionPerformed(evt);
+            }
+        });
 
         searchBT.setText("Buscar");
+        searchBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBTActionPerformed(evt);
+            }
+        });
 
         ll1JTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -226,6 +252,39 @@ public class GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void readFile(File file){
+        ge = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while((line = br.readLine()) != null){
+                ge.add(line);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al abrir el archivo!");
+        }
+    }
+    
+    private void searchBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBTActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("TEXT FILES", "txt", "text"));
+        int selectedOp = fileChooser.showOpenDialog(this);
+        if(selectedOp == JFileChooser.APPROVE_OPTION){
+            File grammarTxt = fileChooser.getSelectedFile();
+            readFile(grammarTxt);
+            routeTF.setText(grammarTxt.getPath());
+        }
+    }//GEN-LAST:event_searchBTActionPerformed
+
+    private void loadBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadBTActionPerformed
+        if(!routeTF.getText().isEmpty()){
+            cfg = new CFGrammar(ge);
+            cfg.computeSets();
+            ll1 = new LL1Algorithm(cfg);
+            ll1.computeMTable();
+        }
+    }//GEN-LAST:event_loadBTActionPerformed
 
     /**
      * @param args the command line arguments
