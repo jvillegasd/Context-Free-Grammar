@@ -140,12 +140,13 @@ public class CFGrammar {
                 String LCP = longestCommonPrefix(samePrefixSet);
                 if(LCP.length() > 0 && samePrefixSet.size() > 1){
                     factorized = true;
+                    System.out.println(LCP);
                     normalizedGE.get(nonTerminal).removeAll(samePrefixSet);
-                    Set<String> newProductions = deletePrefix(prefix, samePrefixSet);
+                    Set<String> newProductions = deletePrefix(LCP, samePrefixSet);
                     String auxNonTerminal = getAuxNonTerminal(nonTerminal);
                     normalizedGE.put(auxNonTerminal, new HashSet<>());
                     normalizedGE.get(auxNonTerminal).addAll(newProductions);
-                    normalizedGE.get(nonTerminal).add(prefix + auxNonTerminal);
+                    normalizedGE.get(nonTerminal).add(LCP + auxNonTerminal);
                 }
             }
         }
@@ -356,9 +357,6 @@ public class CFGrammar {
                         endBetha = i;
                     }
                     if(isTerminal(betha)){
-                        if(follow.get(nonTerminalB).contains("$") && !nonTerminalB.equals(initialState)){
-                            follow.get(nonTerminalB).remove("$");
-                        }
                         continue;
                     }
                     Set<String> bethaFirst = first.get(betha);
@@ -368,6 +366,9 @@ public class CFGrammar {
                         follow.get(nonTerminalB).addAll(doThirdRule(nonTerminal, bethaEpsilon, nonTerminalB, lastGE));
                         if(follow.get(nonTerminalB).isEmpty()){
                             follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
+                        }
+                        if(follow.get(nonTerminalB).contains("$") && !nonTerminalB.equals(initialState)){
+                            follow.get(nonTerminalB).remove("$");
                         }
                     }
                 } else { //Third rule - current NT next to Alpha

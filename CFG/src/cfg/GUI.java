@@ -36,9 +36,17 @@ public class GUI extends javax.swing.JFrame {
         recogLabel = new javax.swing.JLabel();
         wordTF = new javax.swing.JTextField();
         recogBT = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
+        TabbedPane = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        ogJTable = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        svJTable = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        primeroJTable = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        sgtJTable = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tablaMJTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,8 +78,100 @@ public class GUI extends javax.swing.JFrame {
 
         recogBT.setText("Reconocer");
 
-        jTabbedPane1.addTab("Original", jTabbedPane2);
-        jTabbedPane1.addTab("Sin vicios", jTabbedPane3);
+        ogJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No terminal", "Produccion"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(ogJTable);
+
+        TabbedPane.addTab("Original", jScrollPane2);
+
+        svJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No Terminal", "Produccion"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(svJTable);
+
+        TabbedPane.addTab("Sin Vicios", jScrollPane3);
+
+        primeroJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No Terminal", "Conjunto"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(primeroJTable);
+
+        TabbedPane.addTab("Primero", jScrollPane4);
+
+        sgtJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "No Terminal", "Conjunto"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(sgtJTable);
+
+        TabbedPane.addTab("Siguiente", jScrollPane5);
+
+        tablaMJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane6.setViewportView(tablaMJTable);
+
+        TabbedPane.addTab("Tabla M", jScrollPane6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,7 +189,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(routeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchBT))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -120,7 +220,7 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(94, 94, 94)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
@@ -163,17 +263,25 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTabbedPane TabbedPane;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable ll1JTable;
     private javax.swing.JButton loadBT;
+    private javax.swing.JTable ogJTable;
+    private javax.swing.JTable primeroJTable;
     private javax.swing.JButton recogBT;
     private javax.swing.JLabel recogLabel;
     private javax.swing.JLabel routeLabel;
     private javax.swing.JTextField routeTF;
     private javax.swing.JButton searchBT;
+    private javax.swing.JTable sgtJTable;
+    private javax.swing.JTable svJTable;
+    private javax.swing.JTable tablaMJTable;
     private javax.swing.JTextField wordTF;
     // End of variables declaration//GEN-END:variables
 }

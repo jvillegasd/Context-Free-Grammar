@@ -88,7 +88,7 @@ public class Main_class {
     }
     
     private static void test7(ArrayList<String> ge){
-        ge.add("A->BCBDe");
+        ge.add("A->BCBDeL");
         ge.add("A->z");
         ge.add("B->aBB");
         ge.add("B->aBbB");
@@ -97,6 +97,7 @@ public class Main_class {
         ge.add("C->&");
         ge.add("D->abcd");
         ge.add("F->f");
+        ge.add("L->l");
     }
     
     private static void test8(ArrayList<String> ge){
@@ -115,5 +116,15 @@ public class Main_class {
         ge.add("N->zS");
         ge.add("N->z");
         ge.add("N->&");
+    }
+    
+    private static void test10(ArrayList<String> ge){
+        ge.add("S->AB");
+        ge.add("A->aC");
+        ge.add("C->Ab");
+        ge.add("C->b");
+        ge.add("B->cD");
+        ge.add("D->Bd");
+        ge.add("D->d");
     }
 }

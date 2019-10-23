@@ -63,6 +63,7 @@ public class LL1Algorithm {
                     idx++;
                 } else {
                     System.out.println("Error 1!");
+                    break;
                 }
             } else {
                 if(produce(X, ae)){
@@ -72,6 +73,7 @@ public class LL1Algorithm {
                     pushOnStack(stack, swappedProd);
                 } else {
                     System.out.println("Error 2!");
+                    break;
                 }
             }
             if(idx < word.length()) ae = word.charAt(idx) + "";
