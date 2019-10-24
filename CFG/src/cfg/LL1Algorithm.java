@@ -109,6 +109,10 @@ public class LL1Algorithm {
             stack.add(symbol);
         }
     }
+
+    public HashMap<String, HashMap<String, String>> getmTable() {
+        return mTable;
+    }
     
     public void printMTable(){
         System.out.println("M Table:");

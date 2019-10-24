@@ -140,7 +140,6 @@ public class CFGrammar {
                 String LCP = longestCommonPrefix(samePrefixSet);
                 if(LCP.length() > 0 && samePrefixSet.size() > 1){
                     factorized = true;
-                    System.out.println(LCP);
                     normalizedGE.get(nonTerminal).removeAll(samePrefixSet);
                     Set<String> newProductions = deletePrefix(LCP, samePrefixSet);
                     String auxNonTerminal = getAuxNonTerminal(nonTerminal);
@@ -367,9 +366,6 @@ public class CFGrammar {
                         if(follow.get(nonTerminalB).isEmpty()){
                             follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
                         }
-                        if(follow.get(nonTerminalB).contains("$") && !nonTerminalB.equals(initialState)){
-                            follow.get(nonTerminalB).remove("$");
-                        }
                     }
                 } else { //Third rule - current NT next to Alpha
                     follow.get(nonTerminalB).addAll(recFollow(nonTerminal, lastGE));
@@ -406,6 +402,10 @@ public class CFGrammar {
 
     public String getInitialState() {
         return initialState;
+    }
+
+    public HashMap<String, Set<String>> getGrammarEquations() {
+        return grammarEquations;
     }
     
     public void print(){

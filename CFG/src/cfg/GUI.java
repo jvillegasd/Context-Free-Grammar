@@ -7,14 +7,15 @@ package cfg;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -32,6 +33,7 @@ public class GUI extends javax.swing.JFrame {
     
     public GUI() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -63,12 +65,16 @@ public class GUI extends javax.swing.JFrame {
         sgtJTable = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
         tablaMJTable = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        estadoLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         routeLabel.setText("Ruta de archivo:");
 
-        loadBT.setText("Cargar Gramatica");
+        loadBT.setText("Realizar calculos");
         loadBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadBTActionPerformed(evt);
@@ -103,6 +109,11 @@ public class GUI extends javax.swing.JFrame {
         recogLabel.setText("Cadena a reconocer:");
 
         recogBT.setText("Reconocer");
+        recogBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recogBTActionPerformed(evt);
+            }
+        });
 
         ogJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -166,10 +177,7 @@ public class GUI extends javax.swing.JFrame {
 
         sgtJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "No Terminal", "Conjunto"
@@ -199,6 +207,14 @@ public class GUI extends javax.swing.JFrame {
 
         TabbedPane.addTab("Tabla M", jScrollPane6);
 
+        jLabel1.setText("Estado de la gramatica:");
+
+        estadoLabel.setText("Archivo de gramatica no detectado!");
+
+        jLabel2.setText("Nota: NT significa No Terminal");
+
+        jLabel3.setText("Analisis Sintatico Predictivo (LL(1))");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -206,26 +222,35 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(loadBT)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(routeLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(routeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchBT))
-                    .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(estadoLabel))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(routeLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(routeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(searchBT))
+                        .addComponent(loadBT))
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(recogLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(wordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(recogBT))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(recogLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(wordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(recogBT)))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(160, 160, 160))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,16 +263,22 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(recogLabel)
                     .addComponent(wordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(recogBT))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(loadBT)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(estadoLabel))
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addComponent(loadBT)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
@@ -261,12 +292,80 @@ public class GUI extends javax.swing.JFrame {
             while((line = br.readLine()) != null){
                 ge.add(line);
             }
+            br.close();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al abrir el archivo!");
         }
     }
     
+    private void setTablesValues(){
+        DefaultTableModel tableModel = (DefaultTableModel)ogJTable.getModel();
+        for(String equation : ge){
+            String splittedEq[] = equation.split("->");
+            String nonTerminal = splittedEq[0];
+            String production = splittedEq[1];
+            tableModel.addRow(new Object[]{nonTerminal, production});
+        }
+        tableModel = (DefaultTableModel)svJTable.getModel();
+        for(Map.Entry<String, Set<String>> entry : cfg.getNormalizedGE().entrySet()){
+            String nonTerminal = entry.getKey();
+            Set<String> productions = entry.getValue();
+            for(String production : productions){
+                tableModel.addRow(new Object[]{nonTerminal, production});
+            }
+        }
+        tableModel = (DefaultTableModel)primeroJTable.getModel();
+        for(Map.Entry<String, Set<String>> entry : cfg.getFirst().entrySet()){
+            tableModel.addRow(new Object[]{entry.getKey(), entry.getValue().toString()});
+        }
+        tableModel = (DefaultTableModel)sgtJTable.getModel();
+        for(Map.Entry<String, Set<String>> entry : cfg.getFollow().entrySet()){
+            tableModel.addRow(new Object[]{entry.getKey(), entry.getValue().toString()});
+        }
+        tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int col){
+                return false;
+            }
+        };
+        tableModel.addColumn("NT");
+        for(String terminal : cfg.getTerminals()){
+            tableModel.addColumn(terminal);
+        }
+        tableModel.addColumn("$");
+        for(Map.Entry<String, HashMap<String, String>> entry : ll1.getmTable().entrySet()){
+            String nonTerminal = entry.getKey();
+            ArrayList<Object> row = new ArrayList<>();
+            row.add(nonTerminal);
+            for(String terminal : cfg.getTerminals()){
+                String production = entry.getValue().get(terminal);
+                row.add(production);
+            }
+            row.add(entry.getValue().get("$"));
+            tableModel.addRow(row.toArray());
+        }
+        tablaMJTable.setModel(tableModel);
+    }
+    
+    private void resetValues(){
+        routeTF.setText("");
+        cfg = null;
+        ll1 = null;
+        estadoLabel.setText("Archivo de gramatica no detectado!");
+        DefaultTableModel tableModel = (DefaultTableModel)primeroJTable.getModel();
+        tableModel.setRowCount(0);
+        tableModel = (DefaultTableModel)sgtJTable.getModel();
+        tableModel.setRowCount(0);
+        tableModel = (DefaultTableModel)ogJTable.getModel();
+        tableModel.setRowCount(0);
+        tableModel = (DefaultTableModel)svJTable.getModel();
+        tableModel.setRowCount(0);
+        tableModel = (DefaultTableModel)tablaMJTable.getModel();
+        tableModel.setRowCount(0);
+    }
+    
     private void searchBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBTActionPerformed
+        resetValues();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("TEXT FILES", "txt", "text"));
         int selectedOp = fileChooser.showOpenDialog(this);
@@ -274,17 +373,33 @@ public class GUI extends javax.swing.JFrame {
             File grammarTxt = fileChooser.getSelectedFile();
             readFile(grammarTxt);
             routeTF.setText(grammarTxt.getPath());
+            estadoLabel.setText("Gramatica cargada!");
         }
     }//GEN-LAST:event_searchBTActionPerformed
 
     private void loadBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadBTActionPerformed
-        if(!routeTF.getText().isEmpty()){
-            cfg = new CFGrammar(ge);
-            cfg.computeSets();
-            ll1 = new LL1Algorithm(cfg);
-            ll1.computeMTable();
+        try {
+            if(!routeTF.getText().isEmpty()){
+                cfg = new CFGrammar(ge);
+                cfg.computeSets();
+                ll1 = new LL1Algorithm(cfg);
+                ll1.computeMTable();
+                setTablesValues();
+            }
+        } catch (Exception e) {
+            estadoLabel.setText("Error al cargar gramatica.");
         }
     }//GEN-LAST:event_loadBTActionPerformed
+
+    private void recogBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recogBTActionPerformed
+        if(!wordTF.getText().isEmpty()){
+            if(ll1.acceptedWord(wordTF.getText())){
+                JOptionPane.showMessageDialog(null, "Cadena reconocida!");
+            } else{
+                JOptionPane.showMessageDialog(null, "Cadena no reconocida.");
+            }
+        }
+    }//GEN-LAST:event_recogBTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -323,6 +438,10 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabbedPane;
+    private javax.swing.JLabel estadoLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

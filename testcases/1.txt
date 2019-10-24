@@ -1,0 +1,7 @@
+E->A
+E->L
+A->n
+A->id
+L->(S)
+S->E,S
+S->E
