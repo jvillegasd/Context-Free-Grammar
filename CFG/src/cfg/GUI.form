@@ -26,35 +26,38 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="estadoLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="TabbedPane" alignment="0" min="-2" pref="412" max="-2" attributes="0"/>
+                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="estadoLabel" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="loadBT" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="routeLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="routeTF" min="-2" pref="249" max="-2" attributes="0"/>
+                          <Component id="routeTF" min="-2" pref="202" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="searchBT" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="loadBT" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="58" max="32767" attributes="0"/>
+              <EmptySpace pref="53" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="recogLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="wordTF" min="-2" pref="100" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="recogBT" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="nextStringBT" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="recogLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="wordTF" max="32767" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="recogBT" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
@@ -90,15 +93,23 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="loadBT" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="loadBT" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                       <Component id="TabbedPane" min="-2" pref="286" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="372" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="33" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="nextStringBT" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -106,7 +117,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="routeLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ruta de archivo:"/>
+        <Property name="text" type="java.lang.String" value="Ruta de archivo de la gramatica:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="routeTF">
@@ -171,14 +182,14 @@
     </Container>
     <Component class="javax.swing.JLabel" name="recogLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cadena a reconocer:"/>
+        <Property name="text" type="java.lang.String" value="Ruta de archivo de las cadenas:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="wordTF">
     </Component>
     <Component class="javax.swing.JButton" name="recogBT">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Reconocer"/>
+        <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="recogBTActionPerformed"/>
@@ -409,6 +420,11 @@
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="text" type="java.lang.String" value="Analisis Sintatico Predictivo (LL(1))"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="nextStringBT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Siguiente Cadena"/>
       </Properties>
     </Component>
   </SubComponents>

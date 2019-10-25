@@ -33,6 +33,7 @@ public class GUI extends javax.swing.JFrame {
     
     public GUI() {
         initComponents();
+        this.setTitle("ASD y LL(1)");
         this.setLocationRelativeTo(null);
     }
 
@@ -69,10 +70,11 @@ public class GUI extends javax.swing.JFrame {
         estadoLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        nextStringBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        routeLabel.setText("Ruta de archivo:");
+        routeLabel.setText("Ruta de archivo de la gramatica:");
 
         loadBT.setText("Realizar calculos");
         loadBT.addActionListener(new java.awt.event.ActionListener() {
@@ -106,9 +108,9 @@ public class GUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(ll1JTable);
 
-        recogLabel.setText("Cadena a reconocer:");
+        recogLabel.setText("Ruta de archivo de las cadenas:");
 
-        recogBT.setText("Reconocer");
+        recogBT.setText("Buscar");
         recogBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 recogBTActionPerformed(evt);
@@ -215,6 +217,8 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel3.setText("Analisis Sintatico Predictivo (LL(1))");
 
+        nextStringBT.setText("Siguiente Cadena");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -222,31 +226,33 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(estadoLabel))
                     .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(estadoLabel))
+                        .addComponent(loadBT)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(routeLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(routeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(routeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(searchBT))
-                        .addComponent(loadBT))
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                            .addComponent(searchBT))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(recogLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(wordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(recogBT)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(nextStringBT)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(recogLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(wordTF)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(recogBT))))
                         .addGap(21, 21, 21))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
@@ -272,13 +278,18 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(loadBT)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(loadBT)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(nextStringBT)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -328,7 +339,7 @@ public class GUI extends javax.swing.JFrame {
                 return false;
             }
         };
-        tableModel.addColumn("NT");
+        tableModel.addColumn("NonT/T");
         for(String terminal : cfg.getTerminals()){
             tableModel.addColumn(terminal);
         }
@@ -361,6 +372,8 @@ public class GUI extends javax.swing.JFrame {
         tableModel = (DefaultTableModel)svJTable.getModel();
         tableModel.setRowCount(0);
         tableModel = (DefaultTableModel)tablaMJTable.getModel();
+        tableModel.setRowCount(0);
+        tableModel = (DefaultTableModel)ll1JTable.getModel();
         tableModel.setRowCount(0);
     }
     
@@ -395,6 +408,11 @@ public class GUI extends javax.swing.JFrame {
         if(!wordTF.getText().isEmpty()){
             if(ll1.acceptedWord(wordTF.getText())){
                 JOptionPane.showMessageDialog(null, "Cadena reconocida!");
+                ArrayList<Object[]> logs = ll1.getLogs();
+                DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
+                for(Object[] row : logs){
+                    tableModel.addRow(row);
+                }
             } else{
                 JOptionPane.showMessageDialog(null, "Cadena no reconocida.");
             }
@@ -450,6 +468,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable ll1JTable;
     private javax.swing.JButton loadBT;
+    private javax.swing.JButton nextStringBT;
     private javax.swing.JTable ogJTable;
     private javax.swing.JTable primeroJTable;
     private javax.swing.JButton recogBT;

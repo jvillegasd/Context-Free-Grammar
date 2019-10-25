@@ -1,5 +1,7 @@
 package cfg;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
@@ -17,6 +19,7 @@ public class LL1Algorithm {
     private Set<String> terminals = null;
     private HashMap<String, HashMap<String, String>> mTable = null;
     private String initialState = "";
+    private ArrayList<Object[]> logs = null;
     
     public LL1Algorithm(CFGrammar cfg){
         this.normalizedGE = cfg.getNormalizedGE();
@@ -45,12 +48,14 @@ public class LL1Algorithm {
     
     public boolean acceptedWord(String word){
         word = word.replaceAll("&", "");
+        logs = new ArrayList<>();
         Stack<String> stack = new Stack<>();
         stack.push("$");
         stack.push(initialState);
         word+="$";
         String ae = word.charAt(0) + "", X = "";
         int idx = 0;
+        logs.add(new Object[]{"$"+initialState, word, ""});
         do{
             X = stack.peek();
             if(X.equals("&")){
@@ -61,6 +66,9 @@ public class LL1Algorithm {
                 if(X.equals(ae)){
                     stack.pop();
                     idx++;
+                    if(idx < word.length() && !stack.empty()){
+                        logs.add(new Object[]{stack.toString(), word.substring(idx), ""});
+                    }
                 } else {
                     System.out.println("Error 1!");
                     break;
@@ -71,6 +79,9 @@ public class LL1Algorithm {
                     String production = mTable.get(X).get(ae);
                     String swappedProd = swapProduction(production);
                     pushOnStack(stack, swappedProd);
+                    if(idx < word.length() && !stack.empty()){
+                        logs.add(new Object[]{stack.toString(), word.substring(idx), X + "->" +production});
+                    }
                 } else {
                     System.out.println("Error 2!");
                     break;
@@ -112,6 +123,10 @@ public class LL1Algorithm {
 
     public HashMap<String, HashMap<String, String>> getmTable() {
         return mTable;
+    }
+
+    public ArrayList<Object[]> getLogs() {
+        return logs;
     }
     
     public void printMTable(){
