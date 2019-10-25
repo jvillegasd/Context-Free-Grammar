@@ -1,0 +1,4 @@
+P->iEtP
+P->iEtSeP
+P->a
+E->b
