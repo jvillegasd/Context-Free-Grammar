@@ -457,6 +457,7 @@ public class GUI extends javax.swing.JFrame {
             nextStringBT.setVisible(true);
             DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
             tableModel.setRowCount(0);
+            idx = 0;
         }
     }//GEN-LAST:event_recogBTActionPerformed
 

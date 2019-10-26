@@ -407,29 +407,4 @@ public class CFGrammar {
     public HashMap<String, Set<String>> getGrammarEquations() {
         return grammarEquations;
     }
-    
-    public void print(){
-        System.out.println("Terminals:");
-        for(String t : terminals) System.out.print(t + "||");
-        System.out.println("\nNon Terminals:");
-        for(String nt : nonTerminals) System.out.print(nt + "||");
-        System.out.println("");
-        for(Map.Entry<String, Set<String>> entry : this.normalizedGE.entrySet()){
-            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
-        }
-    }
-    
-    public void printFi(){
-        System.out.println("First:");
-        for(Map.Entry<String, Set<String>> entry : this.first.entrySet()){
-            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
-        }
-    }
-    
-    public void printFo(){
-        System.out.println("Follow:");
-        for(Map.Entry<String, Set<String>> entry : this.follow.entrySet()){
-            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
-        }
-    }
 }

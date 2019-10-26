@@ -127,21 +127,4 @@ public class LL1Algorithm {
     public ArrayList<Object[]> getLogs() {
         return logs;
     }
-    
-    public void printMTable(){
-        System.out.println("M Table:");
-        for(String nonTerminal : nonTerminals){
-            System.out.println(nonTerminal + ":");
-            for(String terminal : terminals){
-                if(mTable.get(nonTerminal).get(terminal) == null){
-                    continue;
-                }
-                System.out.println("terminal " + terminal + ": " + mTable.get(nonTerminal).get(terminal));
-            }
-            if(mTable.get(nonTerminal).get("$") != null){
-                System.out.println("terminal $: " + mTable.get(nonTerminal).get("$"));
-            }
-            System.out.println("");
-        }
-    }
 }
