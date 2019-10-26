@@ -30,6 +30,8 @@ public class GUI extends javax.swing.JFrame {
     private CFGrammar cfg = null;
     private LL1Algorithm ll1 = null;
     private ArrayList<String> ge = null;
+    private ArrayList<String> words = null;
+    private int idx = 0;
     
     public GUI() {
         initComponents();
@@ -71,6 +73,8 @@ public class GUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         nextStringBT = new javax.swing.JButton();
+        jLabelN = new javax.swing.JLabel();
+        cadenaLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -217,7 +221,14 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel3.setText("Analisis Sintatico Predictivo (LL(1))");
 
-        nextStringBT.setText("Siguiente Cadena");
+        nextStringBT.setText("Primera cadena");
+        nextStringBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextStringBTActionPerformed(evt);
+            }
+        });
+
+        jLabelN.setText("Cadena a analizar:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -240,23 +251,28 @@ public class GUI extends javax.swing.JFrame {
                             .addComponent(routeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(searchBT))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(nextStringBT)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(recogLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(wordTF)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(recogBT))))
-                        .addGap(21, 21, 21))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(160, 160, 160))))
+                        .addGap(160, 160, 160))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(recogLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(wordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(recogBT))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(107, 107, 107)
+                                .addComponent(jLabelN)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cadenaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(nextStringBT, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(21, 21, 21))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,7 +292,7 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(estadoLabel))
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -284,9 +300,14 @@ public class GUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(loadBT)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(63, 63, 63)))
                         .addComponent(TabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabelN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cadenaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(nextStringBT)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -295,17 +316,30 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void readFile(File file){
-        ge = new ArrayList<>();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while((line = br.readLine()) != null){
-                ge.add(line);
+    private void readFile(File file, boolean isGrammarFile){
+        if(isGrammarFile){
+            ge = new ArrayList<>();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while((line = br.readLine()) != null){
+                    ge.add(line);
+                }
+                br.close();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al abrir el archivo!");
             }
-            br.close();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al abrir el archivo!");
+        } else {
+            words = new ArrayList<>();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while((line = br.readLine()) != null){
+                    words.add(line);
+                }
+                br.close();
+            } catch (Exception e) {
+            }
         }
     }
     
@@ -350,6 +384,7 @@ public class GUI extends javax.swing.JFrame {
             row.add(nonTerminal);
             for(String terminal : cfg.getTerminals()){
                 String production = entry.getValue().get(terminal);
+                if(production != null) production = nonTerminal + "->" + production;
                 row.add(production);
             }
             row.add(entry.getValue().get("$"));
@@ -359,7 +394,12 @@ public class GUI extends javax.swing.JFrame {
     }
     
     private void resetValues(){
+        idx = 0;
+        nextStringBT.setVisible(true);
         routeTF.setText("");
+        cadenaLabel.setText("");
+        nextStringBT.setText("Primera cadena");
+        wordTF.setText("");
         cfg = null;
         ll1 = null;
         estadoLabel.setText("Archivo de gramatica no detectado!");
@@ -384,7 +424,7 @@ public class GUI extends javax.swing.JFrame {
         int selectedOp = fileChooser.showOpenDialog(this);
         if(selectedOp == JFileChooser.APPROVE_OPTION){
             File grammarTxt = fileChooser.getSelectedFile();
-            readFile(grammarTxt);
+            readFile(grammarTxt, true);
             routeTF.setText(grammarTxt.getPath());
             estadoLabel.setText("Gramatica cargada!");
         }
@@ -405,19 +445,47 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_loadBTActionPerformed
 
     private void recogBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recogBTActionPerformed
-        if(!wordTF.getText().isEmpty()){
-            if(ll1.acceptedWord(wordTF.getText())){
-                JOptionPane.showMessageDialog(null, "Cadena reconocida!");
-                ArrayList<Object[]> logs = ll1.getLogs();
-                DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
-                for(Object[] row : logs){
-                    tableModel.addRow(row);
-                }
-            } else{
-                JOptionPane.showMessageDialog(null, "Cadena no reconocida.");
-            }
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("TEXT FILES", "txt", "text"));
+        int selectedOp = fileChooser.showOpenDialog(this);
+        if(selectedOp == JFileChooser.APPROVE_OPTION){
+            File grammarTxt = fileChooser.getSelectedFile();
+            readFile(grammarTxt, false);
+            wordTF.setText(grammarTxt.getPath());
+            JOptionPane.showMessageDialog(null, "Archivo cargado exitosamente!");
+            nextStringBT.setText("Primera cadena");
+            nextStringBT.setVisible(true);
+            DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
+            tableModel.setRowCount(0);
         }
     }//GEN-LAST:event_recogBTActionPerformed
+
+    private void nextStringBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextStringBTActionPerformed
+        if(!wordTF.getText().isEmpty()){
+            DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
+            tableModel.setRowCount(0);
+            if(idx < words.size()){
+                String word = words.get(idx);
+                cadenaLabel.setText(word);
+                if(ll1.acceptedWord(word)){
+                    JOptionPane.showMessageDialog(null, "Cadena reconocida!");
+                    ArrayList<Object[]> logs = ll1.getLogs();
+                    for(Object[] row : logs){
+                        tableModel.addRow(row);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Cadena no reconocida.");
+                }
+                idx++;
+            }
+            if(idx < words.size() - 1) nextStringBT.setText("Siguiente cadena");
+            else if(idx == words.size() - 1) nextStringBT.setText("Ultima cadena");
+            else {
+                JOptionPane.showMessageDialog(null, "Ya no hay cadenas para analizar.");
+                nextStringBT.setVisible(false);
+            }
+        }
+    }//GEN-LAST:event_nextStringBTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -456,10 +524,12 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabbedPane;
+    private javax.swing.JLabel cadenaLabel;
     private javax.swing.JLabel estadoLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabelN;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
