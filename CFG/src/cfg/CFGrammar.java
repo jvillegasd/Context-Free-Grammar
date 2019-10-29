@@ -256,6 +256,9 @@ public class CFGrammar {
                         if(!firstSymbol.contains("&")) break;
                     }
                 } else if(isTerminal(symbolC + "") || symbolC == '&') {
+                    if(symbolC == '&' && production.length() > 1){
+                        continue;
+                    }
                     first.get(nonTerminal).add(symbolC + "");
                     if(symbolC != '&'){ //M Table First Rule
                         mTableFirstRule.get(nonTerminal).put(symbolC + "", production); 

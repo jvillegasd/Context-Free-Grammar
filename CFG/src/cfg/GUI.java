@@ -31,7 +31,6 @@ public class GUI extends javax.swing.JFrame {
     private LL1Algorithm ll1 = null;
     private ArrayList<String> ge = null;
     private ArrayList<String> words = null;
-    private int idx = 0;
     
     public GUI() {
         initComponents();
@@ -72,7 +71,6 @@ public class GUI extends javax.swing.JFrame {
         estadoLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        nextStringBT = new javax.swing.JButton();
         jLabelN = new javax.swing.JLabel();
         cadenaLabel = new javax.swing.JLabel();
 
@@ -112,9 +110,9 @@ public class GUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(ll1JTable);
 
-        recogLabel.setText("Ruta de archivo de las cadenas:");
+        recogLabel.setText("Palabra a reconocer:");
 
-        recogBT.setText("Buscar");
+        recogBT.setText("Reconocer");
         recogBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 recogBTActionPerformed(evt);
@@ -221,13 +219,6 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel3.setText("Analisis Sintatico Predictivo (LL(1))");
 
-        nextStringBT.setText("Primera cadena");
-        nextStringBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nextStringBTActionPerformed(evt);
-            }
-        });
-
         jLabelN.setText("Cadena a analizar:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -269,9 +260,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(jLabelN)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cadenaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(nextStringBT, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(21, 21, 21))))
         );
         layout.setVerticalGroup(
@@ -308,9 +297,7 @@ public class GUI extends javax.swing.JFrame {
                             .addComponent(cadenaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(nextStringBT)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         pack();
@@ -394,11 +381,8 @@ public class GUI extends javax.swing.JFrame {
     }
     
     private void resetValues(){
-        idx = 0;
-        nextStringBT.setVisible(true);
         routeTF.setText("");
         cadenaLabel.setText("");
-        nextStringBT.setText("Primera cadena");
         wordTF.setText("");
         cfg = null;
         ll1 = null;
@@ -445,48 +429,17 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_loadBTActionPerformed
 
     private void recogBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recogBTActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("TEXT FILES", "txt", "text"));
-        int selectedOp = fileChooser.showOpenDialog(this);
-        if(selectedOp == JFileChooser.APPROVE_OPTION){
-            File grammarTxt = fileChooser.getSelectedFile();
-            readFile(grammarTxt, false);
-            wordTF.setText(grammarTxt.getPath());
-            JOptionPane.showMessageDialog(null, "Archivo cargado exitosamente!");
-            nextStringBT.setText("Primera cadena");
-            nextStringBT.setVisible(true);
-            DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
-            tableModel.setRowCount(0);
-            idx = 0;
-        }
-    }//GEN-LAST:event_recogBTActionPerformed
-
-    private void nextStringBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextStringBTActionPerformed
         if(!wordTF.getText().isEmpty()){
             DefaultTableModel tableModel = (DefaultTableModel)ll1JTable.getModel();
             tableModel.setRowCount(0);
-            if(idx < words.size()){
-                String word = words.get(idx);
-                cadenaLabel.setText(word);
-                if(ll1.acceptedWord(word)){
-                    JOptionPane.showMessageDialog(null, "Cadena reconocida!");
-                    ArrayList<Object[]> logs = ll1.getLogs();
-                    for(Object[] row : logs){
-                        tableModel.addRow(row);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Cadena no reconocida.");
-                }
-                idx++;
-            }
-            if(idx < words.size() - 1) nextStringBT.setText("Siguiente cadena");
-            else if(idx == words.size() - 1) nextStringBT.setText("Ultima cadena");
-            else {
-                JOptionPane.showMessageDialog(null, "Ya no hay cadenas para analizar.");
-                nextStringBT.setVisible(false);
+            if(ll1.acceptedWord(wordTF.getText())){
+                JOptionPane.showMessageDialog(null, "Cadena reconocida!");
+            } else JOptionPane.showMessageDialog(null, "Cadena no reconocida.");
+            for(Object[] log : ll1.getLogs()){
+                tableModel.addRow(log);
             }
         }
-    }//GEN-LAST:event_nextStringBTActionPerformed
+    }//GEN-LAST:event_recogBTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -539,7 +492,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable ll1JTable;
     private javax.swing.JButton loadBT;
-    private javax.swing.JButton nextStringBT;
     private javax.swing.JTable ogJTable;
     private javax.swing.JTable primeroJTable;
     private javax.swing.JButton recogBT;

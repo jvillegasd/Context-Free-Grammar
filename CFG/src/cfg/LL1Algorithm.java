@@ -77,6 +77,7 @@ public class LL1Algorithm {
                     stack.pop();
                     String production = mTable.get(X).get(ae);
                     String swappedProd = swapProduction(production);
+                    swappedProd = swappedProd.replaceAll("&", "");
                     pushOnStack(stack, swappedProd);
                     if(idx < word.length() && !stack.empty()){
                         logs.add(new Object[]{stack.toString(), word.substring(idx), X + "->" +production});

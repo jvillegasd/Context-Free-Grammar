@@ -65,10 +65,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cadenaLabel" min="-2" pref="247" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                              <Component id="nextStringBT" min="-2" pref="158" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" min="-2" pref="444" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jScrollPane1" alignment="0" min="-2" pref="444" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
@@ -120,9 +117,7 @@
                       <Component id="jScrollPane1" min="-2" pref="340" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="nextStringBT" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="45" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -195,14 +190,14 @@
     </Container>
     <Component class="javax.swing.JLabel" name="recogLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ruta de archivo de las cadenas:"/>
+        <Property name="text" type="java.lang.String" value="Palabra a reconocer:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="wordTF">
     </Component>
     <Component class="javax.swing.JButton" name="recogBT">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Buscar"/>
+        <Property name="text" type="java.lang.String" value="Reconocer"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="recogBTActionPerformed"/>
@@ -434,14 +429,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Analisis Sintatico Predictivo (LL(1))"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="nextStringBT">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Primera cadena"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nextStringBTActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelN">
       <Properties>
