@@ -210,13 +210,17 @@ public class CFGrammar {
         for(String nonTerminal : this.nonTerminals){
             if(first.get(nonTerminal).isEmpty()) recFirst(nonTerminal, new HashSet<>());
             boolean hasEpsilonOnProd = false;
+            boolean hasSymbol = false;
             for(String production : this.normalizedGE.get(nonTerminal)){
                 if(production.contains("&")){
                     hasEpsilonOnProd = true;
-                    break;
+                }
+                for(int i = 0; i < production.length(); i++){
+                    String symbol = production.charAt(i) + "";
+                    if(isTerminal(symbol)) hasSymbol = true;
                 }
             }
-            if(first.get(nonTerminal).contains("&") && !hasEpsilonOnProd){
+            if(first.get(nonTerminal).contains("&") && !hasEpsilonOnProd && hasSymbol){
                 first.get(nonTerminal).remove("&");
             }
         }
